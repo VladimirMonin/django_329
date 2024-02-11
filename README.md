@@ -7,5 +7,5 @@
 - Создано виртуальное окружение `python -m venv venv`
 - Активировано виртуальное окружение `venv\Scripts\activate`
 - Установлен Django 4.2
-- Создан проект anki `django-admin startproject anki`
+- Создан проект anki `django-admin startproject anki .` (точка в конце команды создает проект в текущей директории)
 - 

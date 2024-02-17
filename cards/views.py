@@ -18,6 +18,17 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.context_processors import request
 
+"""
+Информация в шаблоны будет браться из базы данных
+Но пока, мы сделаем переменные, куда будем записывать информацию, которая пойдет в 
+контекст шаблона
+"""
+
+about_info = {
+    "users_count": 100500,
+    "cards_count": 200600
+}
+
 
 def index(request):
     """Функция для отображения главной страницы
@@ -28,14 +39,13 @@ def index(request):
 def about(request):
     """Функция для отображения страницы "О проекте"
     будет возвращать рендер шаблона /templates/cards/about.html"""
-    return render(request, 'cards/about.html')
+    return render(request, 'cards/about.html', about_info)
 
 
 def catalog(request):
     """Функция для отображения страницы "Каталог"
     будет возвращать рендер шаблона /templates/cards/catalog.html"""
     return render(request, 'cards/catalog.html')
-
 
 
 def get_categories(request):

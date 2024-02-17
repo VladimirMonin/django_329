@@ -8,6 +8,13 @@ get_detail_card_by_id - возвращает детальную информац
 """
 
 from django.http import HttpResponse
+from django.shortcuts import render
+from django.template.context_processors import request
+
+
+def index(request):
+    """Функция будет возвращать рендер шаблона /templates/cards/main.html"""
+    return render(request, 'cards/main.html')
 
 
 def get_all_cards(request):

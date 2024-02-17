@@ -19,7 +19,11 @@ from django.urls import path, include
 from cards import views
 
 urlpatterns = [
+    # Админка
     path('admin/', admin.site.urls),
+    # Маршруты для меню
     path('', views.index),
+    path('about/', views.about),
+    # Маршруты подключенные из приложения cards
     path('cards/', include('cards.urls')),
 ]

@@ -24,22 +24,25 @@ from django.template.context_processors import request
 контекст шаблона
 """
 
-about_info = {
+info = {
     "users_count": 100500,
-    "cards_count": 200600
+    "cards_count": 200600,
+    "menu": ['Главная', 'О проекте', 'Каталог']
 }
+
+
 
 
 def index(request):
     """Функция для отображения главной страницы
     будет возвращать рендер шаблона /templates/cards/main.html"""
-    return render(request, 'cards/main.html')
+    return render(request, 'cards/main.html', info)
 
 
 def about(request):
     """Функция для отображения страницы "О проекте"
     будет возвращать рендер шаблона /templates/cards/about.html"""
-    return render(request, 'cards/about.html', about_info)
+    return render(request, 'cards/about.html', info)
 
 
 def catalog(request):

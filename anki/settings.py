@@ -57,7 +57,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
-        'APP_DIRS': True,
+        'APP_DIRS': True, # Поиск шаблонов внутри приложений
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',

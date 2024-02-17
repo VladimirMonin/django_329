@@ -167,3 +167,4 @@ cython_debug/
 /.idea/vcs.xml
 .idea/git_toolbox_prj.xml
 .vscode/settings.json
+/.vscode/PythonImportHelper-v2-Completion.json

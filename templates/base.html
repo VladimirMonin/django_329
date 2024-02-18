@@ -17,6 +17,10 @@
         </li>
          {% if not forloop.last %}<hr>{% endif %}
     {% endfor %}
+
+<!--        Экспериментальный блок для дочернего шаблона catalog.html-->
+        {% block categories %}
+        {% endblock %}
     </ul>
 </nav>
 {% block content %}

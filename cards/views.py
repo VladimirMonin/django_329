@@ -57,7 +57,7 @@ def about(request):
 def catalog(request):
     """Функция для отображения страницы "Каталог"
     будет возвращать рендер шаблона /templates/cards/catalog.html"""
-    return render(request, 'cards/catalog.html')
+    return render(request, 'cards/catalog.html', info)
 
 
 def get_categories(request):
@@ -65,7 +65,7 @@ def get_categories(request):
     Возвращает все категории для представления в каталоге
     """
     # Проверка работы базового шаблона
-    return render(request, 'base.html',)
+    return render(request, 'base.html', info)
 
 
 def get_cards_by_category(request, slug):

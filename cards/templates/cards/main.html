@@ -16,7 +16,11 @@
         <!-- Если элемент первый или последний ему будет дан класс green -->
         {% for item in menu %}
         <li {% if forloop.first %} class="green" {% endif %}>
-            <a href="{{ item.url }}">{{ item.title }}</a>
+<!--            Хардкод урлов. Если маршрут изменится, то придется менять везде-->
+<!--            <a href="{{ item.url }}">{{ item.title }}</a>-->
+<!--           Урлы через имена. Урлы будут добываться из urls.py автоматически-->
+            <a href="{% url item.url_name %}">{{ item.title }}</a>
+
         </li>
          {% if not forloop.last %}<hr>{% endif %}
     {% endfor %}

@@ -1,11 +1,25 @@
 <!DOCTYPE html>
+<!-- Базовый шаблон -->
 <html lang="en">
 <head>
-<!--  Привет из базового шаблона!  -->
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{ page_title }}</title>
 </head>
 <body>
-
+<nav>
+    <ul>
+        <!-- Цикл на синтаксисе шаблонизатора -->
+        <!-- Если элемент первый или последний ему будет дан класс green -->
+        {% for item in menu %}
+        <li>
+<!--   Урлы через имена. Урлы будут добываться из urls.py автоматически-->
+            <a href="{% url item.url_name %}">{{ item.title }}</a>
+        </li>
+         {% if not forloop.last %}<hr>{% endif %}
+    {% endfor %}
+    </ul>
+</nav>
+{% block content %}
+{% endblock %}
 </body>
 </html>

@@ -64,7 +64,9 @@ def get_categories(request):
     """
     Возвращает все категории для представления в каталоге
     """
-    return HttpResponse('All categories')
+    # TODO Тестирование базового шаблона
+    #
+    return render(request, 'base.html',)
 
 
 def get_cards_by_category(request, slug):

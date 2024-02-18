@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Каталог карточек</title>
-<!--Коммент в шаблоне-->
-
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
 <h1>Каталог карточек Anki для интервального повторения</h1>
-</body>
-</html>
+<p>Здесь вы можете выбрать карточки для изучения</p>
+<p>На текущий момент, у нас карточек: {{cards_count}} и пользователей: {{users_count}} </p>
+{% endblock %}
+
+{% block categories %}
+<hr>
+<li>Привет из дочернего шаблона каталог!</li>
+{% endblock %}

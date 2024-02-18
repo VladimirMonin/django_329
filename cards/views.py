@@ -27,10 +27,19 @@ from django.template.context_processors import request
 info = {
     "users_count": 100500,
     "cards_count": 200600,
-    "menu": ['Главная', 'О проекте', 'Каталог']
+    # "menu": ['Главная', 'О проекте', 'Каталог']
+    "menu": [
+        {"title": "Главная",
+         "url": "/",
+         "url_name": "index"},
+        {"title": "О проекте",
+         "url": "/about/",
+         "url_name": "about"},
+        {"title": "Каталог",
+         "url": "/cards/catalog/",
+         "url_name": "catalog"},
+    ]
 }
-
-
 
 
 def index(request):
@@ -48,14 +57,15 @@ def about(request):
 def catalog(request):
     """Функция для отображения страницы "Каталог"
     будет возвращать рендер шаблона /templates/cards/catalog.html"""
-    return render(request, 'cards/catalog.html')
+    return render(request, 'cards/catalog.html', info)
 
 
 def get_categories(request):
     """
     Возвращает все категории для представления в каталоге
     """
-    return HttpResponse('All categories')
+    # Проверка работы базового шаблона
+    return render(request, 'base.html', info)
 
 
 def get_cards_by_category(request, slug):

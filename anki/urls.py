@@ -22,8 +22,8 @@ urlpatterns = [
     # Админка
     path('admin/', admin.site.urls),
     # Маршруты для меню
-    path('', views.index),
-    path('about/', views.about),
+    path('', views.index, name='index'),
+    path('about/', views.about, name='about'),
     # Маршруты подключенные из приложения cards
     path('cards/', include('cards.urls')),
 ]

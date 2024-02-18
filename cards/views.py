@@ -27,10 +27,19 @@ from django.template.context_processors import request
 info = {
     "users_count": 100500,
     "cards_count": 200600,
-    "menu": ['Главная', 'О проекте', 'Каталог']
+    # "menu": ['Главная', 'О проекте', 'Каталог']
+    "menu": [
+        {"title": "Главная",
+         "url": "/",
+         "url_name": "index"},
+        {"title": "О проекте",
+         "url": "/about/",
+         "url_name": "about"},
+        {"title": "Каталог",
+         "url": "/cards/catalog/",
+         "url_name": "catalog"},
+    ]
 }
-
-
 
 
 def index(request):

@@ -14,11 +14,9 @@
     <ul>
         <!-- Цикл на синтаксисе шаблонизатора -->
         <!-- Если элемент первый или последний ему будет дан класс green -->
-        {% for title in menu %}
-        <li {% if forloop.first %}
-            class="green"
-            {% endif %}>
-            {{ title }}
+        {% for item in menu %}
+        <li {% if forloop.first %} class="green" {% endif %}>
+            <a href="{{ item.url }}">{{ item.title }}</a>
         </li>
          {% if not forloop.last %}<hr>{% endif %}
     {% endfor %}

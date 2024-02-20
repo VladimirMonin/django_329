@@ -1,3 +1,4 @@
+<!-- cards/templates/cards/catalog.html -->
 {% extends "base.html" %}
 {% block content %}
 <h1>Каталог карточек Anki для интервального повторения</h1>
@@ -5,7 +6,7 @@
 <p>На текущий момент, у нас карточек: {{cards_count}} и пользователей: {{users_count}} </p>
 {% endblock %}
 
-{% block categories %}
+{% block categories %} <!-- Не отображается. Т.к. в базовом шаблоне отсутствует блок categories -->
 <hr>
 <li>Привет из дочернего шаблона каталог!</li>
 {% endblock %}

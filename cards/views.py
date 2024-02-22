@@ -100,8 +100,8 @@ info = {
 
 def index(request):
     """Функция для отображения главной страницы
-    будет возвращать рендер шаблона /templates/cards/main.html"""
-    return render(request, 'cards/main.html', info)
+    будет возвращать рендер шаблона root/templates/main.html"""
+    return render(request, "main.html", info)
 
 
 def about(request):

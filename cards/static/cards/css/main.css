@@ -1,4 +1,9 @@
 /* cards/static/cards/css/main.css */
 body {
-background-color: #912424;
+background-color: #f3f4f2;
+}
+
+.copyright {
+color: #cbc1c1;
+font-family: monospace;
 }

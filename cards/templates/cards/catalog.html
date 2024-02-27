@@ -1,12 +1,12 @@
 <!-- cards/templates/cards/catalog.html -->
+<!-- Использует шаблон cards/templates/cards/include/card_preview.html -->
 {% extends "base.html" %}
 {% block content %}
 <h1>Каталог карточек Anki для интервального повторения</h1>
 <p>Здесь вы можете выбрать карточки для изучения</p>
 <p>На текущий момент, у нас карточек: {{cards_count}} и пользователей: {{users_count}} </p>
+{% for card in cards %}
+    {% include "cards/include/card_preview.html" %}
+{% endfor %}
 {% endblock %}
 
-{% block categories %} <!-- Не отображается. Т.к. в базовом шаблоне отсутствует блок categories -->
-<hr>
-<li>Привет из дочернего шаблона каталог!</li>
-{% endblock %}

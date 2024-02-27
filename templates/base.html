@@ -38,7 +38,7 @@
     <!-- Блок для дополнительных настроек в head -->
     {% block head %} {% endblock %}
   </head>
-  <body>
+  <body class="d-flex flex-column min-vh-100">
     <header>
   <div class="container">
     <nav>{% include "include/nav_menu.html" %}</nav>
@@ -46,7 +46,7 @@
 </header>
 
     <!-- Блок контента -->
-  <main>
+   <main class="flex-shrink-0">
   <div class="container mt-3">
     {% block content %} {% endblock %}
   </div>

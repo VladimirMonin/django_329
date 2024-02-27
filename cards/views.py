@@ -106,8 +106,8 @@ def index(request):
 
 def about(request):
     """Функция для отображения страницы "О проекте"
-    будет возвращать рендер шаблона /templates/cards/about.html"""
-    return render(request, 'cards/about.html', info)
+    будет возвращать рендер шаблона /root/templates/about.html"""
+    return render(request, 'about.html', info)
 
 
 def catalog(request):

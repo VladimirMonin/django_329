@@ -40,21 +40,27 @@
   </head>
   <body>
     <header>
-      <nav>{% include "include/nav_menu.html" %}</nav>
-    </header>
-    <main>
-      <!-- Блок контента -->
-      {% block content %} {% endblock %}
-    </main>
+  <div class="container">
+    <nav>{% include "include/nav_menu.html" %}</nav>
+  </div>
+</header>
+
+    <!-- Блок контента -->
+  <main>
+  <div class="container mt-3">
+    {% block content %} {% endblock %}
+  </div>
+</main>
+
     <!-- Блок подвала -->
-    <footer>
-      <p class="copyright">
-        Приложение интервального повторения "Anki", в рамках учебного проекта
-        Академии TOP © 2024
-      </p>
-      <!-- Блок для кастомного футера -->
-      {% block footer %} {% endblock %}
-    </footer>
+    <footer class="footer mt-auto py-3 bg-light">
+  <div class="container">
+    {% block footer %}
+      <p class="text-muted">Приложение интервального повторения "Anki", в рамках учебного проекта Академии TOP © 2024</p>
+    {% endblock %}
+  </div>
+</footer>
+
 
     <!-- СКРИПТЫ! -->
 

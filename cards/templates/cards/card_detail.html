@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load markdown_to_html %}
 {% block content %}
 <!-- Детальное представление карточки cards/templates/cards/detail_card.html
  расширяет базовый шаблон base.html -->
@@ -10,7 +11,10 @@
     <div class="card-body">
       <h5 class="card-title">{{ card.question }}</h5>
       <p class="card-text">{{ card.answer }}</p>
-      <p class="card-text"><small class="text-muted">Категория: {{ card.category }}</small></p>
+<!--      <p class="card-text"><small class="text-muted">Категория: {{ card.category }}</small></p>-->
+<!--      Тестируем markdown_to_html -->
+        <p class="card-text">{% markdown_to_html card.answer %}</p>
+
       <p class="card-text">
         Теги:
         {% for tag in card.tags %}

@@ -28,3 +28,32 @@ class Card(models.Model):
 
     def __str__(self):
         return f'Карточка {self.question} - {self.answer[:50]}'
+
+
+"""
+1. Мы установили и запустили Django shell plus
+2. Создали модель Card
+3. Сделали миграцию
+4. Применили миграцию
+---
+Теперь мы можем создавать записи в БД и работать с ними через Python код
+т.к. это shell plus - нам ничего не надо импортировать, все модули уже подгружены
+
+CRUD
+1. Создаем объект карточки
+card = Card(question='Что такое PEP 8?', answer='PEP 8 — стандарт написания кода на Python.')
+card.save() # Сохраняем карточку в БД
+
+2. Ищем карточку по id 1
+card = Card.objects.get(id=1)
+
+3. Изменяем карточку которая лежит в переменной card
+card.question = "Что такое PEP 8?"
+card.answer = "PEP 8 — стандарт написания кода на Python."
+card.save() # Сохраняем изменения
+
+4. Удаляем карточку
+card.delete()
+Но если мне нужно её найти то
+Card.objects.get(id=1).delete() 
+"""

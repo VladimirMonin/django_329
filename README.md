@@ -133,3 +133,4 @@ cards_dataset = [
 - `pip install ipython django-extensions` установка пакетов для работы с Django shell plus
 - Добавьте `django_extensions` в список `INSTALLED_APPS` в вашем файле `settings.py`
 - `python manage.py shell_plus` запуск Django shell plus
+- `python manage.py shell_plus --print-sql` показывает SQL запросы

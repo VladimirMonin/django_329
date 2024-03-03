@@ -138,3 +138,9 @@ cards_dataset = [
 ### Добавили первое представление из БД
 cards/<int:card_id>/detail/
 Добавили `get_object_or_404` для обработки ошибок 404
+
+### Представление, которое обрабатывает `get` запросы (экспериментальный catalog2)
+- Создаем новый маршрут `catalog2` в `cards.urls`
+- path('catalog2/', views.catalog2, name='catalog2')
+- Создаем новое представление `catalog2` в `views.py`
+- Добавляем в `catalog2` обработку `get` запросов

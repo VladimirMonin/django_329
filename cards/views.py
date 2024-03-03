@@ -116,6 +116,16 @@ def catalog(request):
     будет возвращать рендер шаблона /templates/cards/catalog.html"""
     return render(request, 'cards/catalog.html', info)
 
+def catalog2(request):
+    """
+    Экспериментальный каталог под get запросы
+    Отдаем в ответе все параметры get запроса
+    :param request:
+    :return:
+    """
+    return HttpResponse(request.GET.items())
+
+
 
 def get_categories(request):
     """

@@ -114,3 +114,17 @@ cards_dataset = [
         "favorites_count": 25  
     },
 ```
+## Lesson 57:
+- Разбор домашнего задания
+- Создание пользователького тега шаблонов
+- Знакомство с Django ORM
+- Создание первой модели `Card` и миграция
+
+## Lesson 58:
+- Работа с миграциями
+- Команда `python manage.py makemigrations` создает файл миграции
+- Команда `python manage.py migrate` применяет миграции
+- Команда `python manage.py sqlmigrate cards 0001` показывает SQL код миграции
+- Команда `python manage.py showmigrations` показывает статус миграций
+- Команда `python manage.py migrate cards zero` откатывает все миграции
+- Команда `python manage.py migrate cards 0001` откатывает миграцию до определенной

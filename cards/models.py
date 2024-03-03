@@ -56,4 +56,26 @@ card.save() # Сохраняем изменения
 card.delete()
 Но если мне нужно её найти то
 Card.objects.get(id=1).delete() 
+
+### Работа с несколькими объектами
+Мы можем создать сразу несколько объектов bulk_create
+cards = (
+    Card(question="Что такое PEP 8?", answer="PEP 8 — стандарт написания кода на Python."),
+    Card(question="Что такое PEP 20?", answer="PEP 20 — The Zen of Python."),
+    Card(question="Питон или Пайтон?", answer="Пайтон."),
+    )
+    
+Card.objects.bulk_create(cards)
+
+Получить все карточки
+cards = Card.objects.all()
+
+Получить первых 2 карточки LIMIT 2
+cards = Card.objects.all()[:2] - это не работает в SHELL
+
+Получить карточки в которых в ответах есть слово "PEP"
+cards = Card.objects.filter(answer__contains="PEP")
+
+Получить карточки в которых вопросы начинаются на "Что такое PEP"
+cards = Card.objects.filter(question__startswith="Что такое PEP")
 """

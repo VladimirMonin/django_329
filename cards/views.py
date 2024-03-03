@@ -116,15 +116,36 @@ def catalog(request):
     будет возвращать рендер шаблона /templates/cards/catalog.html"""
     return render(request, 'cards/catalog.html', info)
 
+
+from django.http import HttpResponse
+
+
 def catalog2(request):
     """
-    Экспериментальный каталог под get запросы
-    Отдаем в ответе все параметры get запроса
+    Экспериментальный каталог под GET запросы.
+    Отдаём в ответе все параметры GET запроса или сообщение об отсутствии ожидаемых параметров.
     :param request:
-    :return:
+    :return: HttpResponse
     """
-    return HttpResponse(request.GET.items())
+    # Получаем значения параметров 'OrderBy' и 'Limit' из GET запроса
+    order_by = request.GET.get('OrderBy')
+    limit = request.GET.get('Limit')
 
+    # Строим ответ в зависимости от переданных параметров
+    response_text = []
+
+    if order_by:
+        response_text.append(f'Сортировка по {order_by}')
+    if limit:
+        response_text.append(f'Лимит: {limit}')
+
+    # Если были переданы ожидаемые параметры, объединяем их в одну строку и возвращаем
+    if response_text:
+        return HttpResponse('<br>'.join(response_text))
+
+    # Если ожидаемые параметры не были переданы, возвращаем сообщение об ошибке
+    return HttpResponse('Ожидаемые параметры не переданы. Необходимо передать параметры для '
+                        'сортировки (OrderBy) или лимита (Limit).', status=404)
 
 
 def get_categories(request):

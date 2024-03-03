@@ -17,7 +17,8 @@ render(запрос, шаблон, контекст=None)
 
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.template.context_processors import request
+from .models import Card
+
 
 """
 Информация в шаблоны будет браться из базы данных
@@ -142,8 +143,13 @@ def get_detail_card_by_id(request, card_id):
     """
     Возвращает шаблон cards/templates/cards/card_detail.html с детальной информацией по карточке
     """
-    card_by_id = [card for card in cards_dataset if card['id_card'] == card_id][0]
+    # card_by_id = [card for card in cards_dataset if card['id_card'] == card_id][0]
+    # card = {
+    #     "card": card_by_id
+    # }
+
+    # Добываем карточку из БД
     card = {
-        "card": card_by_id
+        "card": Card.objects.get(id=card_id)
     }
     return render(request, 'cards/card_detail.html', card)

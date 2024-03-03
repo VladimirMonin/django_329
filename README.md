@@ -128,3 +128,8 @@ cards_dataset = [
 - Команда `python manage.py showmigrations` показывает статус миграций
 - Команда `python manage.py migrate cards zero` откатывает все миграции
 - Команда `python manage.py migrate cards 0001` откатывает миграцию до определенной
+
+### Shell plus
+- `pip install ipython django-extensions` установка пакетов для работы с Django shell plus
+- Добавьте `django_extensions` в список `INSTALLED_APPS` в вашем файле `settings.py`
+- `python manage.py shell_plus` запуск Django shell plus

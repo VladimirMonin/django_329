@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_extensions',  # Подключение django-extensions Для shell_plus
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

@@ -134,3 +134,7 @@ cards_dataset = [
 - Добавьте `django_extensions` в список `INSTALLED_APPS` в вашем файле `settings.py`
 - `python manage.py shell_plus` запуск Django shell plus
 - `python manage.py shell_plus --print-sql` показывает SQL запросы
+
+### Добавили первое представление из БД
+cards/<int:card_id>/detail/
+Добавили `get_object_or_404` для обработки ошибок 404

@@ -18,7 +18,7 @@ render(запрос, шаблон, контекст=None)
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Card
-
+from django.shortcuts import get_object_or_404
 
 """
 Информация в шаблоны будет браться из базы данных
@@ -148,8 +148,19 @@ def get_detail_card_by_id(request, card_id):
     #     "card": card_by_id
     # }
 
-    # Добываем карточку из БД
+    # Добываем карточку из БД через get_object_or_404
+    # если карточки с таким id нет, то вернется 404
     card = {
-        "card": Card.objects.get(id=card_id)
+        "card": get_object_or_404(Card, id=card_id),
+        "menu": info["menu"]
     }
-    return render(request, 'cards/card_detail.html', card)
+
+    # Напишем это руками через try except
+    # try:
+    #     card = {
+    #         "card": Card.objects.get(id=card_id)
+    #     }
+    # except Card.DoesNotExist:
+    #     return HttpResponse(f'404. Карточки с id {card_id} не существует', status=404)
+
+    return render(request, 'cards/card_detail.html', card, status=200)

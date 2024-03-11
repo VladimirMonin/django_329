@@ -78,6 +78,7 @@ def catalog(request):
     context = {
         'cards': cards,
         'cards_count': cards.count(),
+        'menu': info['menu'],
     }
     return render(request, 'cards/catalog.html', context)
 

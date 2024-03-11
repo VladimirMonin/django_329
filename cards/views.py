@@ -112,7 +112,9 @@ def about(request):
 
 
 def catalog(request):
-    """Функция для отображения страницы "Каталог"
+    """
+    /cards/catalog/
+    Функция для отображения страницы "Каталог"
     будет возвращать рендер шаблона /templates/cards/catalog.html"""
     return render(request, 'cards/catalog.html', info)
 
@@ -122,6 +124,7 @@ from django.http import HttpResponse
 
 def catalog2(request):
     """
+    /cards/catalog2/
     Экспериментальный каталог под GET запросы.
     Отдаём в ответе все параметры GET запроса или сообщение об отсутствии ожидаемых параметров.
     :param request:
@@ -172,6 +175,7 @@ def get_cards_by_tag(request, slug):
 
 def get_detail_card_by_id(request, card_id):
     """
+    /cards/<int:card_id>/detail/
     Возвращает шаблон cards/templates/cards/card_detail.html с детальной информацией по карточке
     """
     # card_by_id = [card for card in cards_dataset if card['id_card'] == card_id][0]

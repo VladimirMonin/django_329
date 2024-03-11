@@ -20,6 +20,7 @@ class Card(models.Model):
     upload_date = models.DateTimeField(auto_now_add=True)
     views = models.IntegerField(default=0)
     adds = models.IntegerField(default=0)
+    tags = models.JSONField(null=True)
 
     class Meta:
         db_table = 'Cards'

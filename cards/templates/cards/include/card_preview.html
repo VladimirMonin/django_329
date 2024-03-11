@@ -1,9 +1,9 @@
 <!-- Краткое представление карточки cards/templates/cards/include/card_preview.html -->
-<div class="card mb-3" style="max-width: 540px;">
+<div class="card mb-3 light">
   <div class="row g-0">
     <div class="col-md-4 d-flex align-items-center justify-content-center">
       <div class="p-3">
-        <i class="bi bi-question-circle-fill" style="font-size: 2rem;"></i>
+        <i class="bi bi-question-circle-fill" style="font-size: 3rem;"></i>
       </div>
     </div>
     <div class="col-md-8">
@@ -17,14 +17,16 @@
             <span class="badge bg-secondary">{{ tag }}</span>
           {% endfor %}
         </p>
+        <!-- Горизонтальное выравнивание для элементов даты, просмотров, добавлений и кнопки -->
+
         <div class="d-flex justify-content-between align-items-center mt-2">
           <small class="text-muted">Дата загрузки: {{ card.upload_date }}</small>
-          <div>
+          <div class="ms-auto"> <!-- Добавлен класс ms-auto для сдвига вправо -->
             <i class="bi bi-eye"></i> {{ card.views }}
             <i class="bi bi-star-fill"></i> {{ card.adds }}
-            <!-- Кнопка детального представления -->
-            <a href="{% url 'detail_card_by_id' card_id=card.id %}" class="btn btn-dark btn-sm" role="button">Подробнее</a>
           </div>
+          <!-- Кнопка детального представления добавлен класс для отступа слева ms-3 margin-start -->
+          <a href="{% url 'detail_card_by_id' card_id=card.id %}" class="btn btn-dark btn-sm ms-3" role="button">Подробнее</a>
         </div>
       </div>
     </div>

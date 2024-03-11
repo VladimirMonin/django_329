@@ -52,19 +52,9 @@ def about(request):
 def catalog(request):
     """
     /cards/catalog/
-    Функция для отображения страницы "Каталог"
-    будет возвращать рендер шаблона /templates/cards/catalog.html"""
-    return render(request, 'cards/catalog.html', info)
-
-
-from django.http import HttpResponse
-
-
-def catalog2(request):
-    """
-    /cards/catalog2/
-    Экспериментальный каталог под GET запросы.
-    Отдаём в ответе все параметры GET запроса или сообщение об отсутствии ожидаемых параметров.
+    - **`sort`** - ключ для указания типа сортировки с возможными значениями: `date`, `views`, `adds`.
+    - **`order`** - опциональный ключ, указывающий порядок сортировки: `asc` для возрастания,
+    `desc` для убывания; по умолчанию используется `desc`.
     :param request:
     :return: HttpResponse
     """
@@ -72,21 +62,25 @@ def catalog2(request):
     order_by = request.GET.get('OrderBy')
     limit = request.GET.get('Limit')
 
-    # Строим ответ в зависимости от переданных параметров
-    response_text = []
+    # Получаем все карточки из БД
+    cards = Card.objects.all()
 
+    # Если параметр 'OrderBy' передан, то сортируем карточки
     if order_by:
-        response_text.append(f'Сортировка по {order_by}')
+        cards = cards.order_by(order_by)
+
+    # Если параметр 'Limit' передан, то ограничиваем количество карточек
     if limit:
-        response_text.append(f'Лимит: {limit}')
+        cards = cards[:int(limit)]
 
-    # Если были переданы ожидаемые параметры, объединяем их в одну строку и возвращаем
-    if response_text:
-        return HttpResponse('<br>'.join(response_text))
+    # Возвращаем шаблон cards/templates/cards/catalog.html с карточками
+    context = {
+        "cards": cards,
+        "menu": info["menu"],
+        "cards_count": Card.objects.count(),
+    }
+    return render(request, 'cards/catalog.html', context)
 
-    # Если ожидаемые параметры не были переданы, возвращаем сообщение об ошибке
-    return HttpResponse('Ожидаемые параметры не переданы. Необходимо передать параметры для '
-                        'сортировки (OrderBy) или лимита (Limit).', status=404)
 
 
 def get_categories(request):
@@ -121,7 +115,7 @@ def get_detail_card_by_id(request, card_id):
     # если карточки с таким id нет, то вернется 404
     card = {
         "card": get_object_or_404(Card, id=card_id),
-        "menu": info["menu"]
+        "menu": info["menu"],
     }
 
     return render(request, 'cards/card_detail.html', card, status=200)

@@ -51,35 +51,36 @@ def about(request):
 
 def catalog(request):
     """
-    /cards/catalog/
-    - **`sort`** - ключ для указания типа сортировки с возможными значениями: `date`, `views`, `adds`.
-    - **`order`** - опциональный ключ, указывающий порядок сортировки: `asc` для возрастания,
-    `desc` для убывания; по умолчанию используется `desc`.
-    :param request:
-    :return: HttpResponse
+    Функция для отображения каталога карточек с возможностью сортировки.
+    Параметры GET запроса:
+    - sort: ключ для сортировки (допустимые значения: 'upload_date', 'views', 'adds').
+    - order: порядок сортировки ('asc' для возрастания, 'desc' для убывания; по умолчанию 'desc').
     """
-    # Получаем значения параметров 'OrderBy' и 'Limit' из GET запроса
-    order_by = request.GET.get('OrderBy')
-    limit = request.GET.get('Limit')
+    # Считываем параметры из GET запроса
+    sort = request.GET.get('sort', 'upload_date')  # по умолчанию сортируем по дате загрузки
+    order = request.GET.get('order', 'desc')  # по умолчанию используем убывающий порядок
 
-    # Получаем все карточки из БД
-    cards = Card.objects.all()
+    # Сопоставляем параметр сортировки с полями модели
+    valid_sort_fields = {'upload_date', 'views', 'adds'}
+    if sort not in valid_sort_fields:
+        sort = 'upload_date'  # Возвращаемся к сортировке по умолчанию, если передан неверный ключ сортировки
 
-    # Если параметр 'OrderBy' передан, то сортируем карточки
-    if order_by:
-        cards = cards.order_by(order_by)
+    # Обрабатываем порядок сортировки
+    if order == 'asc':
+        order_by = sort
+    else:
+        order_by = f'-{sort}'
 
-    # Если параметр 'Limit' передан, то ограничиваем количество карточек
-    if limit:
-        cards = cards[:int(limit)]
+    # Получаем отсортированные карточки
+    cards = Card.objects.all().order_by(order_by)
 
-    # Возвращаем шаблон cards/templates/cards/catalog.html с карточками
+    # Подготавливаем контекст и отображаем шаблон
     context = {
-        "cards": cards,
-        "menu": info["menu"],
-        "cards_count": Card.objects.count(),
+        'cards': cards,
+        'cards_count': cards.count(),
     }
     return render(request, 'cards/catalog.html', context)
+
 
 
 

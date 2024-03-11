@@ -14,6 +14,8 @@ name='markdown_to_html' - это имя тега, которое будет ис
 """
 
 from django import template
+import markdown
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
@@ -27,7 +29,11 @@ def markdown_to_html(markdown_text: str) -> str:
     :param markdown_text: Текст в формате Markdown
     :return: Текст в формате HTML
     """
-    # Преобразование Markdown в HTML
-    html_text = "ЭТО HTML!) " + markdown_text.upper()
 
-    return html_text
+    # Включение расширений для улучшенной обработки
+    md_extensions = ['extra', 'fenced_code', 'tables']
+
+    # Преобразование Markdown в HTML с расширениями
+    html_content = markdown.markdown(markdown_text, extensions=md_extensions)
+
+    return mark_safe(html_content)

@@ -115,12 +115,14 @@ cards_dataset = [
     },
 ```
 ## Lesson 57:
+02.03.2024
 - Разбор домашнего задания
 - Создание пользователького тега шаблонов
 - Знакомство с Django ORM
 - Создание первой модели `Card` и миграция
 
 ## Lesson 58:
+03.03.2024
 - Работа с миграциями
 - Команда `python manage.py makemigrations` создает файл миграции
 - Команда `python manage.py migrate` применяет миграции
@@ -135,6 +137,58 @@ cards_dataset = [
 - `python manage.py shell_plus` запуск Django shell plus
 - `python manage.py shell_plus --print-sql` показывает SQL запросы
 
+#### Работа с Django shell plus
+1. Мы установили и запустили Django shell plus
+2. Создали модель Card
+3. Сделали миграцию
+4. Применили миграцию
+---
+Теперь мы можем создавать записи в БД и работать с ними через Python код
+т.к. это shell plus - нам ничего не надо импортировать, все модули уже подгружены
+
+##### CRUD
+1. Создаем объект карточки
+`card = Card(question='Что такое PEP 8?', answer='PEP 8 — стандарт написания кода на Python.')`
+`card.save()` # Сохраняем карточку в БД
+
+2. Ищем карточку по id 1
+`card = Card.objects.get(id=1)`
+
+3. Изменяем карточку которая лежит в переменной card
+`card.question = "Что такое PEP 8?"`
+`card.answer = "PEP 8 — стандарт написания кода на Python."`
+`card.save()` # Сохраняем изменения
+
+4. Удаляем карточку
+`card.delete()`
+Но если мне нужно её найти то
+`Card.objects.get(id=1).delete() `
+
+#### Работа с несколькими объектами
+Мы можем создать сразу несколько объектов bulk_create
+```python
+cards = (
+    Card(question="Что такое PEP 8?", answer="PEP 8 — стандарт написания кода на Python."),
+    Card(question="Что такое PEP 20?", answer="PEP 20 — The Zen of Python."),
+    Card(question="Питон или Пайтон?", answer="Пайтон."),
+    )
+```
+`Card.objects.bulk_create(cards)`
+
+Получить все карточки
+`cards = Card.objects.all()`
+
+Получить первых 2 карточки LIMIT 2
+`cards = Card.objects.all()[:2]` - это не работает в SHELL
+
+Получить карточки в которых в ответах есть слово "PEP"
+`cards = Card.objects.filter(answer__contains="PEP")`
+
+Получить карточки в которых вопросы начинаются на "Что такое PEP"
+`cards = Card.objects.filter(question__startswith="Что такое PEP")`
+"""
+
+
 ### Добавили первое представление из БД
 cards/<int:card_id>/detail/
 Добавили `get_object_or_404` для обработки ошибок 404
@@ -144,3 +198,14 @@ cards/<int:card_id>/detail/
 - path('catalog2/', views.catalog2, name='catalog2')
 - Создаем новое представление `catalog2` в `views.py`
 - Добавляем в `catalog2` обработку `get` запросов
+
+## Lesson 59:
+16.03.2024
+### Разбор HW_37
+
+- Подключение модели `Card` в админку
+- Руссификация админки
+- Создание суперпользователя через команду `python manage.py createsuperuser`
+- Посмотрели на CRUD операции в админке
+
+### Типы связей в моделях Django

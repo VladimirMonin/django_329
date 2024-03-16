@@ -55,47 +55,48 @@ class Passport(models.Model):
         return f"{self.passport_number} issued for {self.user.username}"
 
 
+# Определение модели Post
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    body = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+
+# Определение модели Comment
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    author_name = models.CharField(max_length=50)
+    text = models.TextField()
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Comment by {self.author_name} on {self.post.title}"
+
+
 """
-#### Взаимодействие с данными
-from your_app.models import User, Passport
-from datetime import date
+Запросы в Shell Plus
+1. Добавить пост
 
-# Создание пользователя
-user = User(username='john_doe', email='john@example.com', first_name='John', last_name='Doe')
-user.save()
+from cards.models import Post
+post = Post(title='Первый пост', body='Тело первого поста')
 
-# Создание паспорта для пользователя
-passport = Passport(user=user, passport_number='123456789', issue_date=date(2020, 1, 1), expiration_date=date(2030, 1, 1))
-passport.save()
+2. Сохранить пост
+post.save()
 
-Вы можете легко получить доступ к паспортным данным пользователя и наоборот:
-```python
-# Получение пользователя по pk
-user = User_custom.objects.get(pk=1)
+3. Добавить комментарий
+from cards.models import Comment
+comment = Comment(post=post, author_name="Вася", text="Текст комментария")
+comment = Comment(post=post, author_name="Вова", text="Текст комментария 2")
+comment.save()
 
-# Получение pk его паспорта
-passport_pk = user.passport.pk
+Найдем первый коммент Василия
+comment = Comment.objects.filter(author_name="Вася").first()
 
-# Получение номера паспорта
-passport_number = user.passport.passport_number
+Найдем все комменты к этому посту
+comments = Comment.objects.filter(post=post)
 
-# Получение паспорта пользователя
-passport = user.passport
-
-passport = Passport.objects.get(pk=passport_pk)
-
-# Получение пользователя по паспорту
-user = passport.user
-```
-
-Вы также можете использовать обратный доступ к связанным объектам:
-
-```python
-# Получение всех пользователей с их паспортами
-users_with_passports = User.objects.select_related('passport')
-
-for user in users_with_passports:
-    print(user.username, user.passport.passport_number)
-```
-
+Сортируем посты по имени автора desc
+comments = Comment.objects.order_by("-author_name")
 """

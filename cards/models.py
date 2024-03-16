@@ -1,15 +1,9 @@
 """
-Lesson 57 - начали осваивать Django ORM
-
-ID - Django сделает автоматом, он будет первичным ключом, индексом и автоинкрементом
-Отличие charfield от textfield - в количестве символов, которые можно в них хранить
-Charfield - до 255 символов, textfield - без ограничений
-
-class Meta - это вложенный класс, который содержит метаданные модели
-db_table - это имя таблицы в базе данных
-verbose_name - это имя модели в единственном числе
-verbose_name_plural - это имя модели во множественном числе
-они используются для отображения в админке
+Lesson 59 - Отдельная ветка для экспериментов с моделями
+# Для запуска shell plus с отображением команд, надо выполнить: python manage.py shell_plus --print-sql
+blank=True - позволяет полю быть пустым
+null=True - позволяет полю быть null
+откатится к миграции - python manage.py migrate cards 0001
 """
 from django.db import models
 
@@ -31,52 +25,77 @@ class Card(models.Model):
         return f'Карточка {self.question} - {self.answer[:50]}'
 
 
+# Определение модели User
+class User_custom(models.Model):
+    username = models.CharField(max_length=150, unique=True)
+    email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+
+    def __str__(self):
+        return self.username
+
+
+# Определение модели Passport
+class Passport(models.Model):
+    user = models.OneToOneField(User_custom, on_delete=models.CASCADE)
+    passport_number = models.CharField(max_length=9)
+    issue_date = models.DateField()
+    expiration_date = models.DateField()
+
+    class Meta:
+        verbose_name = 'Паспорт'
+        verbose_name_plural = 'Паспорта'
+
+    def __str__(self):
+        return f"{self.passport_number} issued for {self.user.username}"
+
+
 """
-1. Мы установили и запустили Django shell plus
-2. Создали модель Card
-3. Сделали миграцию
-4. Применили миграцию
----
-Теперь мы можем создавать записи в БД и работать с ними через Python код
-т.к. это shell plus - нам ничего не надо импортировать, все модули уже подгружены
+#### Взаимодействие с данными
+from your_app.models import User, Passport
+from datetime import date
 
-CRUD
-1. Создаем объект карточки
-card = Card(question='Что такое PEP 8?', answer='PEP 8 — стандарт написания кода на Python.')
-card.save() # Сохраняем карточку в БД
+# Создание пользователя
+user = User(username='john_doe', email='john@example.com', first_name='John', last_name='Doe')
+user.save()
 
-2. Ищем карточку по id 1
-card = Card.objects.get(id=1)
+# Создание паспорта для пользователя
+passport = Passport(user=user, passport_number='123456789', issue_date=date(2020, 1, 1), expiration_date=date(2030, 1, 1))
+passport.save()
 
-3. Изменяем карточку которая лежит в переменной card
-card.question = "Что такое PEP 8?"
-card.answer = "PEP 8 — стандарт написания кода на Python."
-card.save() # Сохраняем изменения
+Вы можете легко получить доступ к паспортным данным пользователя и наоборот:
+```python
+# Получение пользователя по pk
+user = User_custom.objects.get(pk=1)
 
-4. Удаляем карточку
-card.delete()
-Но если мне нужно её найти то
-Card.objects.get(id=1).delete() 
+# Получение pk его паспорта
+passport_pk = user.passport.pk
 
-### Работа с несколькими объектами
-Мы можем создать сразу несколько объектов bulk_create
-cards = (
-    Card(question="Что такое PEP 8?", answer="PEP 8 — стандарт написания кода на Python."),
-    Card(question="Что такое PEP 20?", answer="PEP 20 — The Zen of Python."),
-    Card(question="Питон или Пайтон?", answer="Пайтон."),
-    )
-    
-Card.objects.bulk_create(cards)
+# Получение номера паспорта
+passport_number = user.passport.passport_number
 
-Получить все карточки
-cards = Card.objects.all()
+# Получение паспорта пользователя
+passport = user.passport
 
-Получить первых 2 карточки LIMIT 2
-cards = Card.objects.all()[:2] - это не работает в SHELL
+passport = Passport.objects.get(pk=passport_pk)
 
-Получить карточки в которых в ответах есть слово "PEP"
-cards = Card.objects.filter(answer__contains="PEP")
+# Получение пользователя по паспорту
+user = passport.user
+```
 
-Получить карточки в которых вопросы начинаются на "Что такое PEP"
-cards = Card.objects.filter(question__startswith="Что такое PEP")
+Вы также можете использовать обратный доступ к связанным объектам:
+
+```python
+# Получение всех пользователей с их паспортами
+users_with_passports = User.objects.select_related('passport')
+
+for user in users_with_passports:
+    print(user.username, user.passport.passport_number)
+```
+
 """

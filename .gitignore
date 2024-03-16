@@ -168,3 +168,4 @@ cython_debug/
 .idea/git_toolbox_prj.xml
 .vscode/settings.json
 /.vscode/PythonImportHelper-v2-Completion.json
+/db_full.db

@@ -11,72 +11,62 @@ verbose_name - это имя модели в единственном числе
 verbose_name_plural - это имя модели во множественном числе
 они используются для отображения в админке
 """
+# This is an auto-generated Django model module.
+# You'll have to do the following manually to clean this up:
+#   * Rearrange models' order
+#   * Make sure each model has one field with primary_key=True
+#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
+#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
+# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
 
-class Card(models.Model):
-    question = models.CharField(max_length=255)
-    answer = models.TextField(max_length=5000)
-    upload_date = models.DateTimeField(auto_now_add=True)
-    views = models.IntegerField(default=0)
-    adds = models.IntegerField(default=0)
-    tags = models.JSONField(null=True)
+class Cardtags(models.Model):
+    cardid = models.OneToOneField('Cards', models.DO_NOTHING, db_column='CardID', primary_key=True, blank=True, null=True)  # Field name made lowercase. The composite primary key (CardID, TagID) found, that is not supported. The first column is selected.
+    tagid = models.ForeignKey('Tags', models.DO_NOTHING, db_column='TagID', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
+        managed = False
+        db_table = 'CardTags'
+
+
+class Cards(models.Model):
+    cardid = models.AutoField(db_column='CardID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    question = models.TextField(db_column='Question')  # Field name made lowercase.
+    answer = models.TextField(db_column='Answer')  # Field name made lowercase.
+    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='UserID', blank=True, null=True)  # Field name made lowercase.
+    categoryid = models.ForeignKey('Categories', models.DO_NOTHING, db_column='CategoryID', blank=True, null=True)  # Field name made lowercase.
+    uploaddate = models.DateTimeField(db_column='UploadDate', blank=True, null=True)  # Field name made lowercase.
+    views = models.IntegerField(db_column='Views', blank=True, null=True)  # Field name made lowercase.
+    favorites = models.IntegerField(db_column='Favorites', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
         db_table = 'Cards'
-        verbose_name = 'Карточка'
-        verbose_name_plural = 'Карточки'
-
-    def __str__(self):
-        return f'Карточка {self.question} - {self.answer[:50]}'
 
 
-"""
-1. Мы установили и запустили Django shell plus
-2. Создали модель Card
-3. Сделали миграцию
-4. Применили миграцию
----
-Теперь мы можем создавать записи в БД и работать с ними через Python код
-т.к. это shell plus - нам ничего не надо импортировать, все модули уже подгружены
+class Categories(models.Model):
+    categoryid = models.AutoField(db_column='CategoryID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    name = models.TextField(db_column='Name', unique=True)  # Field name made lowercase.
 
-CRUD
-1. Создаем объект карточки
-card = Card(question='Что такое PEP 8?', answer='PEP 8 — стандарт написания кода на Python.')
-card.save() # Сохраняем карточку в БД
+    class Meta:
+        managed = False
+        db_table = 'Categories'
 
-2. Ищем карточку по id 1
-card = Card.objects.get(id=1)
 
-3. Изменяем карточку которая лежит в переменной card
-card.question = "Что такое PEP 8?"
-card.answer = "PEP 8 — стандарт написания кода на Python."
-card.save() # Сохраняем изменения
+class Tags(models.Model):
+    tagid = models.AutoField(db_column='TagID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    name = models.TextField(db_column='Name', unique=True)  # Field name made lowercase.
 
-4. Удаляем карточку
-card.delete()
-Но если мне нужно её найти то
-Card.objects.get(id=1).delete() 
+    class Meta:
+        managed = False
+        db_table = 'Tags'
 
-### Работа с несколькими объектами
-Мы можем создать сразу несколько объектов bulk_create
-cards = (
-    Card(question="Что такое PEP 8?", answer="PEP 8 — стандарт написания кода на Python."),
-    Card(question="Что такое PEP 20?", answer="PEP 20 — The Zen of Python."),
-    Card(question="Питон или Пайтон?", answer="Пайтон."),
-    )
-    
-Card.objects.bulk_create(cards)
 
-Получить все карточки
-cards = Card.objects.all()
+class Users(models.Model):
+    userid = models.AutoField(db_column='UserID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
+    firstname = models.TextField(db_column='FirstName')  # Field name made lowercase.
 
-Получить первых 2 карточки LIMIT 2
-cards = Card.objects.all()[:2] - это не работает в SHELL
-
-Получить карточки в которых в ответах есть слово "PEP"
-cards = Card.objects.filter(answer__contains="PEP")
-
-Получить карточки в которых вопросы начинаются на "Что такое PEP"
-cards = Card.objects.filter(question__startswith="Что такое PEP")
-"""
+    class Meta:
+        managed = False
+        db_table = 'Users'

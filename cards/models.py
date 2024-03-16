@@ -21,52 +21,46 @@ verbose_name_plural - это имя модели во множественном
 from django.db import models
 
 
-class Cardtags(models.Model):
-    cardid = models.OneToOneField('Cards', models.DO_NOTHING, db_column='CardID', primary_key=True, blank=True, null=True)  # Field name made lowercase. The composite primary key (CardID, TagID) found, that is not supported. The first column is selected.
-    tagid = models.ForeignKey('Tags', models.DO_NOTHING, db_column='TagID', blank=True, null=True)  # Field name made lowercase.
+# Модель пользователя
+class User(models.Model):
+    # Уберем blank=True, null=True для первичного ключа, т.к. это не соответствует логике первичного ключа
+    user_id = models.AutoField(primary_key=True)
+    first_name = models.CharField(max_length=255)
 
     class Meta:
-        managed = False
-        db_table = 'CardTags'
+        db_table = 'Users'
 
 
-class Cards(models.Model):
-    cardid = models.AutoField(db_column='CardID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
-    question = models.TextField(db_column='Question')  # Field name made lowercase.
-    answer = models.TextField(db_column='Answer')  # Field name made lowercase.
-    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='UserID', blank=True, null=True)  # Field name made lowercase.
-    categoryid = models.ForeignKey('Categories', models.DO_NOTHING, db_column='CategoryID', blank=True, null=True)  # Field name made lowercase.
-    uploaddate = models.DateTimeField(db_column='UploadDate', blank=True, null=True)  # Field name made lowercase.
-    views = models.IntegerField(db_column='Views', blank=True, null=True)  # Field name made lowercase.
-    favorites = models.IntegerField(db_column='Favorites', blank=True, null=True)  # Field name made lowercase.
+# Модель категорий
+class Category(models.Model):
+    category_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255, unique=True)
 
     class Meta:
-        managed = False
-        db_table = 'Cards'
-
-
-class Categories(models.Model):
-    categoryid = models.AutoField(db_column='CategoryID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
-    name = models.TextField(db_column='Name', unique=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
         db_table = 'Categories'
 
 
-class Tags(models.Model):
-    tagid = models.AutoField(db_column='TagID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
-    name = models.TextField(db_column='Name', unique=True)  # Field name made lowercase.
+# Модель тегов
+class Tag(models.Model):
+    tag_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255, unique=True)
 
     class Meta:
-        managed = False
         db_table = 'Tags'
 
 
-class Users(models.Model):
-    userid = models.AutoField(db_column='UserID', primary_key=True, blank=True, null=True)  # Field name made lowercase.
-    firstname = models.TextField(db_column='FirstName')  # Field name made lowercase.
+# Модель карточек
+class Card(models.Model):
+    card_id = models.AutoField(primary_key=True)
+    question = models.TextField()
+    answer = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    upload_date = models.DateTimeField(auto_now_add=True)
+    views = models.IntegerField(default=0)
+    adds = models.IntegerField(default=0)
+    # Непосредственное определение связи многие ко многим с моделью Tag
+    tags = models.ManyToManyField('Tag', related_name='cards')
 
     class Meta:
-        managed = False
-        db_table = 'Users'
+        db_table = 'Cards'

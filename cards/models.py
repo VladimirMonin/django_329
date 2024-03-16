@@ -11,6 +11,7 @@ verbose_name - это имя модели в единственном числе
 verbose_name_plural - это имя модели во множественном числе
 они используются для отображения в админке
 """
+from django.contrib.auth.models import User
 # This is an auto-generated Django model module.
 # You'll have to do the following manually to clean this up:
 #   * Rearrange models' order
@@ -21,46 +22,44 @@ verbose_name_plural - это имя модели во множественном
 from django.db import models
 
 
-# Модель пользователя
-class User(models.Model):
-    # Уберем blank=True, null=True для первичного ключа, т.к. это не соответствует логике первичного ключа
-    user_id = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=255)
-
-    class Meta:
-        db_table = 'Users'
-
-
-# Модель категорий
 class Category(models.Model):
-    category_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255, unique=True)
+    category_id = models.AutoField(primary_key=True, db_column='CategoryID')
+    name = models.CharField(max_length=255, unique=True, db_column='Name')
 
     class Meta:
         db_table = 'Categories'
 
 
-# Модель тегов
 class Tag(models.Model):
-    tag_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=255, unique=True)
+    tag_id = models.AutoField(primary_key=True, db_column='TagID')
+    name = models.CharField(max_length=255, unique=True, db_column='Name')
 
     class Meta:
         db_table = 'Tags'
 
 
-# Модель карточек
 class Card(models.Model):
-    card_id = models.AutoField(primary_key=True)
-    question = models.TextField()
-    answer = models.TextField()
-    user = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
-    upload_date = models.DateTimeField(auto_now_add=True)
-    views = models.IntegerField(default=0)
-    adds = models.IntegerField(default=0)
+    card_id = models.AutoField(primary_key=True, db_column='CardID')
+    question = models.TextField(db_column='Question')
+    answer = models.TextField(db_column='Answer')
+    user_id = models.ForeignKey(User, on_delete=models.SET_DEFAULT, default=1, db_column='UserID')
+    category_id = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=1, db_column='CategoryID')
+    upload_date = models.DateTimeField(auto_now_add=True, db_column='UploadDate')
+    views = models.IntegerField(default=0, db_column='Views')
+    favorites = models.IntegerField(default=0, db_column='Favorites')
     # Непосредственное определение связи многие ко многим с моделью Tag
-    tags = models.ManyToManyField('Tag', related_name='cards')
+    tags = models.ManyToManyField('Tag', related_name='cards', through='CardTags')
+
+    # through - это модель, которая будет использоваться для связи многие ко многим
 
     class Meta:
         db_table = 'Cards'
+
+
+class CardTags(models.Model):
+    card = models.ForeignKey('Card', on_delete=models.CASCADE, db_column='CardID')
+    tag = models.ForeignKey('Tag', on_delete=models.CASCADE, db_column='TagID')
+
+    class Meta:
+        db_table = 'CardTags'
+        unique_together = (('card', 'tag'),)

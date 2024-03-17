@@ -90,26 +90,23 @@ class Comment(models.Model):
 
 """
 Запросы в Shell Plus
-1. Добавить пост
+1. Добавить теги
+tag1 = Tag.objects.create(name="Python")
+tag2 = Tag.objects.create(name="Django")
+tag3 = Tag.objects.create(name="Flask")
 
-from cards.models import Post
-post = Post(title='Первый пост', body='Тело первого поста')
+2. Сохранить теги
+tag1.save()
+tag2.save()
+tag3.save()
 
-2. Сохранить пост
-post.save()
+3. Создать карточку с тегами
+card = Card.objects.create(question="Как создать карточку?", answer="Используйте метод create()")
+card.tags.add(tag1, tag2)
 
-3. Добавить комментарий
-from cards.models import Comment
-comment = Comment(post=post, author_name="Вася", text="Текст комментария")
-comment = Comment(post=post, author_name="Вова", text="Текст комментария 2")
-comment.save()
+4. Добыть последнюю карточку
+last_card = Card.objects.last()
 
-Найдем первый коммент Василия
-comment = Comment.objects.filter(author_name="Вася").first()
-
-Найдем все комменты к этому посту
-comments = Comment.objects.filter(post=post)
-
-Сортируем посты по имени автора desc
-comments = Comment.objects.order_by("-author_name")
+5. Из карточки добудем теги
+tags = card.tags.all()
 """

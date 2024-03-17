@@ -14,8 +14,8 @@
         <p class="card-text"><small class="text-muted">Категория: {{ card.category }}</small></p>
         <p class="card-text">
           Теги:
-          {% for tag in card.tags %}
-            <span class="badge bg-secondary">{{ tag }}</span>
+          {% for tag in card.tags.all %}
+            <span class="badge bg-secondary"><a href="{% url 'get_cards_by_tag' tag_id=tag.pk %}" class="text-white">{{ tag.name }}</a></span>
           {% endfor %}
         </p>
         <!-- Горизонтальное выравнивание для элементов даты, просмотров, добавлений и кнопки -->

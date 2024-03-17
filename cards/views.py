@@ -100,11 +100,20 @@ def get_cards_by_category(request, slug):
     return HttpResponse(f'Cards by category {slug}')
 
 
-def get_cards_by_tag(request, slug):
+def get_cards_by_tag(request, tag_id):
     """
     Возвращает карточки по тегу для представления в каталоге
+    Мы используем многие-ко-многим, получая все карточки, которые связаны с тегом
+    Временно, мы будем использовать шаблон каталога
     """
-    return HttpResponse(f'Cards by tag {slug}')
+    cards = Card.objects.filter(tags=tag_id)
+    context = {
+        'cards': cards,
+        'cards_count': cards.count(),
+        'menu': info['menu'],
+    }
+    return render(request, 'cards/catalog.html', context)
+
 
 
 def get_detail_card_by_id(request, card_id):

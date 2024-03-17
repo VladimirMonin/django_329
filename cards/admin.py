@@ -4,21 +4,18 @@ python manage.py createsuperuser - создание суперпользоват
 
 from django.contrib import admin
 
-from .models import Card, User_custom, Passport
+from .models import Card, Tag
 
 
 @admin.register(Card)
 class CardAdmin(admin.ModelAdmin):
-    pass
+    """
+    Класс для отображения модели Card в админке Django
+    Имеет поле поиска по тегу, а так же поиск по вопросу и ответу
+    """
+    search_fields = ['tags__name']
 
 
-@admin.register(User_custom)
-class UserAdmin(admin.ModelAdmin):
-    search_fields = ('username', 'email')
-    pass
-
-
-@admin.register(Passport)
-class PassportAdmin(admin.ModelAdmin):
-    search_fields = ('passport_number', 'user__username',)
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
     pass

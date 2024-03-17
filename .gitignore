@@ -169,3 +169,5 @@ cython_debug/
 .vscode/settings.json
 /.vscode/PythonImportHelper-v2-Completion.json
 /db_full.db
+/db.sqlite
+/lesson_47.db

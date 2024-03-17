@@ -169,3 +169,5 @@ cython_debug/
 .vscode/settings.json
 /.vscode/PythonImportHelper-v2-Completion.json
 /db_full.db
+/cards/migrations/0005_tag_remove_card_tags_card_tags.py
+/lesson_47.db

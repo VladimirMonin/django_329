@@ -14,7 +14,7 @@ class Card(models.Model):
     upload_date = models.DateTimeField(auto_now_add=True)
     views = models.IntegerField(default=0)
     adds = models.IntegerField(default=0)
-    tags = models.JSONField(null=True)
+    tags = models.ManyToManyField('Tag', related_name='cards', null=True)
 
     class Meta:
         db_table = 'Cards'
@@ -23,6 +23,19 @@ class Card(models.Model):
 
     def __str__(self):
         return f'Карточка {self.question} - {self.answer[:50]}'
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    class Meta:
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
+
+    def __str__(self):
+        return self.name
+
+
 
 
 # Определение модели User

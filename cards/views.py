@@ -14,12 +14,11 @@ render(запрос, шаблон, контекст=None)
     Возвращает объект HttpResponse с отрендеренным шаблоном шаблон и контекстом контекст.
     Если контекст не передан, используется пустой словарь.
 """
-
+from django.db.models import F
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Card
 from django.shortcuts import get_object_or_404
-
 
 info = {
 
@@ -83,8 +82,6 @@ def catalog(request):
     return render(request, 'cards/catalog.html', context)
 
 
-
-
 def get_categories(request):
     """
     Возвращает все категории для представления в каталоге
@@ -115,7 +112,6 @@ def get_cards_by_tag(request, tag_id):
     return render(request, 'cards/catalog.html', context)
 
 
-
 def get_detail_card_by_id(request, card_id):
     """
     /cards/<int:card_id>/detail/
@@ -124,8 +120,16 @@ def get_detail_card_by_id(request, card_id):
 
     # Добываем карточку из БД через get_object_or_404
     # если карточки с таким id нет, то вернется 404
+    # Используем F object для обновления счетчика просмотров (views)
+
+    card_obj = get_object_or_404(Card, id=card_id)
+    card_obj.views = F('views') + 1
+    card_obj.save()
+
+    card_obj.refresh_from_db()  # Обновляем данные из БД
+
     card = {
-        "card": get_object_or_404(Card, id=card_id),
+        "card": card_obj,
         "menu": info["menu"],
     }
 

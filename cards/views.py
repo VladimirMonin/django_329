@@ -100,11 +100,11 @@ def get_cards_by_category(request, slug):
     return HttpResponse(f'Cards by category {slug}')
 
 
-def get_cards_by_tag(request, slug):
+def get_cards_by_tag(request, tag_id):
     """
     Возвращает карточки по тегу для представления в каталоге
     """
-    return HttpResponse(f'Cards by tag {slug}')
+    return HttpResponse(f'Cards by tag {tag_id}')
 
 
 def get_detail_card_by_id(request, card_id):
@@ -116,7 +116,7 @@ def get_detail_card_by_id(request, card_id):
     # Добываем карточку из БД через get_object_or_404
     # если карточки с таким id нет, то вернется 404
     card = {
-        "card": get_object_or_404(Card, id=card_id),
+        "card": get_object_or_404(Card, card_id=card_id),
         "menu": info["menu"],
     }
 

@@ -24,7 +24,6 @@ register = template.Library()
 def markdown_to_html(markdown_text: str) -> str:
     """
     Преобразует текст из формата Markdown в HTML
-    ЭТО УЧЕБНЫЙ ПРИМЕР БЕЗ РЕАЛЬНОГО ФУНКЦИОНАЛА
 
     :param markdown_text: Текст в формате Markdown
     :return: Текст в формате HTML

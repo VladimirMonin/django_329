@@ -14,6 +14,22 @@ verbose_name_plural - это имя модели во множественном
 from django.db import models
 
 
+class Category(models.Model):
+    category_id = models.AutoField(primary_key=True, db_column='CategoryID')
+    name = models.CharField(max_length=255, unique=True, db_column='Name')
+
+    class Meta:
+        db_table = 'Categories'
+
+
+class Tag(models.Model):
+    tag_id = models.AutoField(primary_key=True, db_column='TagID')
+    name = models.CharField(max_length=255, unique=True, db_column='Name')
+
+    class Meta:
+        db_table = 'Tags'
+
+
 class Card(models.Model):
     card_id = models.AutoField(primary_key=True, db_column='CardID')
     question = models.TextField(db_column='Question')
@@ -29,11 +45,6 @@ class Card(models.Model):
 
     class Meta:
         db_table = 'Cards'
-        verbose_name = 'Карточка'
-        verbose_name_plural = 'Карточки'
-
-    def __str__(self):
-        return f'Карточка {self.question} - {self.answer[:50]}'
 
 
 class CardTags(models.Model):

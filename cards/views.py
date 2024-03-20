@@ -123,7 +123,7 @@ def get_detail_card_by_id(request, card_id):
     # если карточки с таким id нет, то вернется 404
     # Используем F object для обновления счетчика просмотров (views)
 
-    card_obj = get_object_or_404(Card, id=card_id)
+    card_obj = get_object_or_404(Card, pk=card_id)
     card_obj.views = F('views') + 1
     card_obj.save()
 

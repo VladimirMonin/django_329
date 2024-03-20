@@ -11,31 +11,7 @@ verbose_name - это имя модели в единственном числе
 verbose_name_plural - это имя модели во множественном числе
 они используются для отображения в админке
 """
-from django.contrib.auth.models import User
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-
-
-class Category(models.Model):
-    category_id = models.AutoField(primary_key=True, db_column='CategoryID')
-    name = models.CharField(max_length=255, unique=True, db_column='Name')
-
-    class Meta:
-        db_table = 'Categories'
-
-
-class Tag(models.Model):
-    tag_id = models.AutoField(primary_key=True, db_column='TagID')
-    name = models.CharField(max_length=255, unique=True, db_column='Name')
-
-    class Meta:
-        db_table = 'Tags'
 
 
 class Card(models.Model):
@@ -53,6 +29,11 @@ class Card(models.Model):
 
     class Meta:
         db_table = 'Cards'
+        verbose_name = 'Карточка'
+        verbose_name_plural = 'Карточки'
+
+    def __str__(self):
+        return f'Карточка {self.question} - {self.answer[:50]}'
 
 
 class CardTags(models.Model):

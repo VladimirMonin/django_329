@@ -171,3 +171,5 @@ cython_debug/
 /db_full.db
 /db.sqlite
 /lesson_47.db
+/cards/migrations/0005_tag_remove_card_tags_card_tags.py
+

@@ -1,9 +1,9 @@
 {% load markdown_to_html %}
 <!-- Краткое представление карточки cards/templates/cards/include/card_preview.html -->
 <div class="card mb-3 light">
-  <div class="row g-0">
+  <div class="row g-0 ">
     <div class="col-md-4 d-flex align-items-center justify-content-center">
-      <div class="p-3">
+      <div class="p-3 d-none d-lg-block">
         <i class="bi bi-question-circle-fill" style="font-size: 3rem;"></i>
       </div>
     </div>
@@ -21,13 +21,23 @@
         <!-- Горизонтальное выравнивание для элементов даты, просмотров, добавлений и кнопки -->
 
         <div class="d-flex justify-content-between align-items-center mt-2">
-          <small class="text-muted">Дата загрузки: {{ card.upload_date }}</small>
+          <small class="text-muted d-none d-sm-block">Дата загрузки: {{ card.upload_date }}</small>
           <div class="ms-auto"> <!-- Добавлен класс ms-auto для сдвига вправо -->
             <i class="bi bi-eye"></i> {{ card.views }}
             <i class="bi bi-star-fill"></i> {{ card.favorites }}
           </div>
-          <!-- Кнопка детального представления добавлен класс для отступа слева ms-3 margin-start -->
-          <a href="{% url 'detail_card_by_id' card_id=card.pk %}" class="btn btn-dark btn-sm ms-3" role="button">Подробнее</a>
+
+        <!--    ТУТ 2 КНОПКИ. 1 видно на компьютерах, другую на телефонах.    -->
+          <!-- Кнопка для sm и меньше (только иконка) -->
+<a href="{% url 'detail_card_by_id' card_id=card.pk %}" class="btn btn-dark btn-sm ms-3 d-block d-sm-none">
+    <i class="bi bi-arrow-right"></i>
+</a>
+
+<!-- Кнопка для sm и больше (полный текст) -->
+<a href="{% url 'detail_card_by_id' card_id=card.pk %}" class="btn btn-dark btn-sm ms-3 d-none d-sm-block">
+    Подробнее
+</a>
+
         </div>
       </div>
     </div>

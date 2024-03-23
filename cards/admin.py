@@ -15,7 +15,7 @@ from .models import Card, Category, Tag, CardTags
 class CardAdmin(admin.ModelAdmin):
     list_display = ('get_questions', 'upload_date', 'category_name', 'tags_list', 'brief_info')
     list_display_links = ('get_questions',)
-    list_filter = ('category_id',)
+    list_filter = ('category_id', 'check_status')
     search_fields = ('question', 'category_id__name', 'answer', 'tags__name')
     ordering = ('-upload_date', 'question')
     list_per_page = 20

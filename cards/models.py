@@ -21,6 +21,8 @@ class Category(models.Model):
 
     class Meta:
         db_table = 'Categories'
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
     def __str__(self):
         return self.name
@@ -32,6 +34,8 @@ class Tag(models.Model):
 
     class Meta:
         db_table = 'Tags'
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
 
     def __str__(self):
         return self.name
@@ -42,7 +46,7 @@ class Card(models.Model):
     question = models.TextField(db_column='Question')
     answer = models.TextField(db_column='Answer')
     category_id = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, db_column='CategoryID')
-    upload_date = models.DateTimeField(auto_now_add=True, db_column='UploadDate')
+    upload_date = models.DateTimeField(auto_now_add=True, db_column='UploadDate', verbose_name='Дата загрузки')
     views = models.IntegerField(default=0, db_column='Views')
     favorites = models.IntegerField(default=0, db_column='Favorites')
     # Непосредственное определение связи многие ко многим с моделью Tag
@@ -52,6 +56,8 @@ class Card(models.Model):
 
     class Meta:
         db_table = 'Cards'
+        verbose_name = 'Карточка'
+        verbose_name_plural = 'Карточки'
 
     def __str__(self):
         return self.question
@@ -64,12 +70,15 @@ class Card(models.Model):
 
 
 class CardTags(models.Model):
+    id = models.AutoField(primary_key=True, db_column='id')
     card = models.ForeignKey('Card', on_delete=models.CASCADE, db_column='CardID')
     tag = models.ForeignKey('Tag', on_delete=models.CASCADE, db_column='TagID')
 
     class Meta:
         db_table = 'CardTags'
         unique_together = (('card', 'tag'),)
+        verbose_name = 'Связь карточка-тег'
+        verbose_name_plural = 'Связи карточка-тег'
 
     def __str__(self):
         return f'{self.card} - {self.tag}'

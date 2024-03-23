@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='CardTags',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='id')),
                 ('card', models.ForeignKey(db_column='CardID', on_delete=django.db.models.deletion.CASCADE, to='cards.card')),
                 ('tag', models.ForeignKey(db_column='TagID', on_delete=django.db.models.deletion.CASCADE, to='cards.tag')),
             ],

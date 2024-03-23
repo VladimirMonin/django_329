@@ -12,6 +12,7 @@ verbose_name_plural - это имя модели во множественном
 они используются для отображения в админке
 """
 from django.db import models
+from django.urls import reverse
 
 
 class Category(models.Model):
@@ -54,6 +55,12 @@ class Card(models.Model):
 
     def __str__(self):
         return self.question
+
+    # Опишем get_absolute_url для модели Card - метод, который возвращает URL карточки
+    # Псевдоним - detail_card_by_id
+    # reverse - возвращает URL по псевдониму
+    def get_absolute_url(self):
+        return reverse('detail_card_by_id', kwargs={'card_id': self.card_id})
 
 
 class CardTags(models.Model):

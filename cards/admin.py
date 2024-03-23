@@ -12,7 +12,10 @@ from .models import Card, Category, Tag, CardTags
 @admin.register(Card)
 class CardAdmin(admin.ModelAdmin):
     list_display = ('get_questions', 'upload_date', 'category_name', 'tags_list')
-
+    list_display_links = ('get_questions', 'category_name')
+    list_filter = ('category_id',)
+    search_fields = ('question', 'category_id__name', 'answer', 'tags__name')
+    ordering = ('-upload_date', 'question')
     # Добавляем метод для отображения названия категории
     def category_name(self, obj):
         return obj.category_id.name

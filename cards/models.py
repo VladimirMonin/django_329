@@ -10,6 +10,9 @@ db_table - это имя таблицы в базе данных
 verbose_name - это имя модели в единственном числе
 verbose_name_plural - это имя модели во множественном числе
 они используются для отображения в админке
+
+model.choice - это класс, который позволяет создавать поля с ограниченным набором значений
+варианты integerchoices и charchoices
 """
 from django.db import models
 from django.urls import reverse
@@ -42,6 +45,10 @@ class Tag(models.Model):
 
 
 class Card(models.Model):
+    class Status(models.IntegerChoices):
+        UNCHECKED = 0, 'Не проверено'
+        CHECKED = 1, 'Проверено'
+
     card_id = models.AutoField(primary_key=True, db_column='CardID')
     question = models.TextField(db_column='Question')
     answer = models.TextField(db_column='Answer')
@@ -49,6 +56,8 @@ class Card(models.Model):
     upload_date = models.DateTimeField(auto_now_add=True, db_column='UploadDate', verbose_name='Дата загрузки')
     views = models.IntegerField(default=0, db_column='Views')
     favorites = models.IntegerField(default=0, db_column='Favorites')
+    # Через map bool мы будем приводить 0 и 1 к False и True
+    check_status = models.BooleanField(choices=tuple(map(lambda x: (bool(x[0]), x[1]), Status.choices)), default=Status.UNCHECKED, db_column='CheckStatus')
     # Непосредственное определение связи многие ко многим с моделью Tag
     tags = models.ManyToManyField('Tag', related_name='cards', through='CardTags')
 

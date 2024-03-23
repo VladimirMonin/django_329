@@ -2,12 +2,12 @@
 <!-- Краткое представление карточки cards/templates/cards/include/card_preview.html -->
 <div class="card mb-3 light">
   <div class="row g-0 ">
-    <div class="col-md-4 d-flex align-items-center justify-content-center">
-      <div class="p-3 d-none d-lg-block">
+    <div class="col-md-3 d-flex align-items-center justify-content-center">
+      <div class="p-3 d-none d-md-block">
         <i class="bi bi-question-circle-fill" style="font-size: 3rem;"></i>
       </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-9">
       <div class="card-body">
         <h5 class="card-title">{% markdown_to_html card.question %}</h5>
         <p class="card-text">{% markdown_to_html card.answer|truncatechars:100 %}</p>

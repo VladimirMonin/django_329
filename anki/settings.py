@@ -105,11 +105,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'  # Язык в админке
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'UTC' # Часовой пояс для всего проекта
 
 USE_I18N = True
 
-USE_TZ = False
+USE_TZ = True # Python pytz - библиотека для работы с часовыми поясами
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

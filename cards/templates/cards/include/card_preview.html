@@ -24,7 +24,7 @@
           <small class="text-muted">Дата загрузки: {{ card.upload_date }}</small>
           <div class="ms-auto"> <!-- Добавлен класс ms-auto для сдвига вправо -->
             <i class="bi bi-eye"></i> {{ card.views }}
-            <i class="bi bi-star-fill"></i> {{ card.adds }}
+            <i class="bi bi-star-fill"></i> {{ card.favorites }}
           </div>
           <!-- Кнопка детального представления добавлен класс для отступа слева ms-3 margin-start -->
           <a href="{% url 'detail_card_by_id' card_id=card.pk %}" class="btn btn-dark btn-sm ms-3" role="button">Подробнее</a>

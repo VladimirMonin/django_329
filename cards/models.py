@@ -21,6 +21,9 @@ class Category(models.Model):
     class Meta:
         db_table = 'Categories'
 
+    def __str__(self):
+        return self.name
+
 
 class Tag(models.Model):
     tag_id = models.AutoField(primary_key=True, db_column='TagID')
@@ -28,6 +31,9 @@ class Tag(models.Model):
 
     class Meta:
         db_table = 'Tags'
+
+    def __str__(self):
+        return self.name
 
 
 class Card(models.Model):
@@ -46,6 +52,9 @@ class Card(models.Model):
     class Meta:
         db_table = 'Cards'
 
+    def __str__(self):
+        return self.question
+
 
 class CardTags(models.Model):
     card = models.ForeignKey('Card', on_delete=models.CASCADE, db_column='CardID')
@@ -54,3 +63,6 @@ class CardTags(models.Model):
     class Meta:
         db_table = 'CardTags'
         unique_together = (('card', 'tag'),)
+
+    def __str__(self):
+        return f'{self.card} - {self.tag}'

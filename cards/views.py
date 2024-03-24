@@ -72,12 +72,15 @@ def catalog(request):
         order_by = f'-{sort}'
 
     # Получаем отсортированные карточки
-    cards = Card.objects.all().order_by(order_by)
+    # cards = Card.objects.all().order_by(order_by)
+
+    # Получаем отсортированные карточки через ЖАДНУЮ ЗАГРУЗКУ
+    cards = Card.objects.prefetch_related('tags').order_by(order_by)
 
     # Подготавливаем контекст и отображаем шаблон
     context = {
         'cards': cards,
-        'cards_count': cards.count(),
+        'cards_count': len(cards),
         'menu': info['menu'],
     }
     return render(request, 'cards/catalog.html', context)
@@ -123,11 +126,16 @@ def get_detail_card_by_id(request, card_id):
     # если карточки с таким id нет, то вернется 404
     # Используем F object для обновления счетчика просмотров (views)
 
-    card_obj = get_object_or_404(Card, pk=card_id)
-    card_obj.views = F('views') + 1
-    card_obj.save()
+    # card_obj = get_object_or_404(Card, pk=card_id)
+    # card_obj.views = F('views') + 1
+    # card_obj.save()
+    #
+    # card_obj.refresh_from_db()  # Обновляем данные из БД
 
-    card_obj.refresh_from_db()  # Обновляем данные из БД
+
+    # Жадная загрузка многие-ко-многим и обновление счетчика просмотров
+    # Card.objects.filter(pk=card_id).update(views=F('views') + 1)
+    card_obj = Card.objects.prefetch_related('tags').get(pk=card_id)
 
     card = {
         "card": card_obj,

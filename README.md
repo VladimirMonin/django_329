@@ -278,3 +278,10 @@ INTERNAL_IPS = [
          # ...
      ]
 ```
+
+- Использовали жадную загрузку данных в `catalog` через `Card.objects.prefetch_related('tags').order_by(order_by)`
+что дало жадную загрузку как всех карточек, так и их тегов. Для каталога, это ускорение загрузки в 15 раз
+и 3 запроса против 450 + запросов
+
+- `prefetch_related` - жадная загрузка для связанных объектов с отношением `ForeignKey` и `ManyToManyField`
+- `select_related` - жадная загрузка для связанных объектов с отношением `OneToOneField` и `ForeignKey`

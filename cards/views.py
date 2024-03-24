@@ -19,6 +19,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Card
 from django.shortcuts import get_object_or_404
+from django.views.decorators.cache import cache_page
+
 
 
 info = {
@@ -49,6 +51,7 @@ def about(request):
     return render(request, 'about.html', info)
 
 
+@cache_page(60 * 15)  # Кэширует на 15 минут
 def catalog(request):
     """
     Функция для отображения каталога карточек с возможностью сортировки.
@@ -61,7 +64,7 @@ def catalog(request):
     order = request.GET.get('order', 'desc')  # по умолчанию используем убывающий порядок
 
     # Сопоставляем параметр сортировки с полями модели
-    valid_sort_fields = {'upload_date', 'views', 'adds'}
+    valid_sort_fields = {'upload_date', 'views', 'favorites'}  # Исправил 'adds' на 'favorites', предполагая, что это опечатка
     if sort not in valid_sort_fields:
         sort = 'upload_date'  # Возвращаемся к сортировке по умолчанию, если передан неверный ключ сортировки
 
@@ -71,19 +74,18 @@ def catalog(request):
     else:
         order_by = f'-{sort}'
 
-    # Получаем отсортированные карточки
-    # cards = Card.objects.all().order_by(order_by)
-
     # Получаем отсортированные карточки через ЖАДНУЮ ЗАГРУЗКУ
     cards = Card.objects.prefetch_related('tags').order_by(order_by)
 
-    # Подготавливаем контекст и отображаем шаблон
     context = {
         'cards': cards,
         'cards_count': len(cards),
-        'menu': info['menu'],
+        'sort': sort,  # Добавлено для возможности отображения текущей сортировки в шаблоне
+        'order': order,  # Добавлено для возможности отображения текущего порядка в шаблоне
+        'menu': info['menu'],  # Добавлено для отображения меню на странице
     }
     return render(request, 'cards/catalog.html', context)
+
 
 
 def get_categories(request):
@@ -100,14 +102,17 @@ def get_cards_by_category(request, slug):
     """
     return HttpResponse(f'Cards by category {slug}')
 
-
+@cache_page(60 * 15)  # Кэширует на 15 минут
 def get_cards_by_tag(request, tag_id):
     """
     Возвращает карточки по тегу для представления в каталоге
     Мы используем многие-ко-многим, получая все карточки, которые связаны с тегом
     Временно, мы будем использовать шаблон каталога
     """
-    cards = Card.objects.filter(tags=tag_id)
+    # cards = Card.objects.filter(tags=tag_id)
+
+    # Жадная загрузка
+    cards = Card.objects.filter(tags=tag_id).prefetch_related('tags')
     context = {
         'cards': cards,
         'cards_count': cards.count(),
@@ -117,26 +122,11 @@ def get_cards_by_tag(request, tag_id):
 
 
 def get_detail_card_by_id(request, card_id):
-    """
-    /cards/<int:card_id>/detail/
-    Возвращает шаблон cards/templates/cards/card_detail.html с детальной информацией по карточке
-    """
-
-    # Добываем карточку из БД через get_object_or_404
-    # если карточки с таким id нет, то вернется 404
-    # Используем F object для обновления счетчика просмотров (views)
-
-    # card_obj = get_object_or_404(Card, pk=card_id)
-    # card_obj.views = F('views') + 1
-    # card_obj.save()
-    #
-    # card_obj.refresh_from_db()  # Обновляем данные из БД
-
-
-    # Жадная загрузка многие-ко-многим и обновление счетчика просмотров
-    # Card.objects.filter(pk=card_id).update(views=F('views') + 1)
-    card_obj = Card.objects.prefetch_related('tags').get(pk=card_id)
-
+    card_obj = get_object_or_404(Card.objects.prefetch_related('tags'), pk=card_id)
+    
+    # Обновление счетчика просмотров
+    Card.objects.filter(pk=card_id).update(views=F('views') + 1)
+    
     card = {
         "card": card_obj,
         "menu": info["menu"],

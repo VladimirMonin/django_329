@@ -27,16 +27,17 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INTERNAL_IPS = [
-         # ...
-         '127.0.0.1',
-         # ...
-     ]
+    # ...
+    '127.0.0.1',
+    # ...
+]
 
 # Application definition
 
 INSTALLED_APPS = [
     'django_extensions',  # Подключение django-extensions Для shell_plus
     'debug_toolbar',  # Подключение debug_toolbar
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -113,11 +114,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'  # Язык в админке
 
-TIME_ZONE = 'UTC' # Часовой пояс для всего проекта
+TIME_ZONE = 'UTC'  # Часовой пояс для всего проекта
 
 USE_I18N = True
 
-USE_TZ = True # Python pytz - библиотека для работы с часовыми поясами
+USE_TZ = True  # Python pytz - библиотека для работы с часовыми поясами
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
@@ -128,3 +129,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}

@@ -285,3 +285,8 @@ INTERNAL_IPS = [
 
 - `prefetch_related` - жадная загрузка для связанных объектов с отношением `ForeignKey` и `ManyToManyField`
 - `select_related` - жадная загрузка для связанных объектов с отношением `OneToOneField` и `ForeignKey`
+
+
+- Установили `django-jazzmin` через `pip install django-jazzmin`
+- Подключили `django-jazzmin` через `settings.py`
+- Добавили `jazzmin` в `INSTALLED_APPS`

@@ -52,6 +52,8 @@ class CardAdmin(admin.ModelAdmin):
     ordering = ('-upload_date', 'question')
     list_per_page = 20
     actions = ['mark_as_checked', 'mark_as_unchecked']
+    fields = ('question', 'answer', 'category_id') #TODO tags - ошибка из за "through" - надо переделывать модель многие ко многим
+    # filter_horizontal = ('tags',)
 
     # list_editable = ('category_name',) # Редактируемое поле
     # Добавляем метод для отображения названия категории

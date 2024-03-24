@@ -241,3 +241,40 @@ cards/<int:card_id>/detail/
 - Руссификация заголовка фильтра категории через `verbose_name` в поле модели
 - Добавление рекдатирования статуса карточки, прямо в списке карточек (пока не работает)
 - Добавили собственное действие в админке для карточек через `actions` `@admin.action(description='Отметить как проверенные')`
+
+- Django Debug Toolbar
+- Установка Django Debug Toolbar через `pip install django-debug-toolbar`
+- Подключили Django Debug Toolbar через `settings.py` и `urls.py`
+
+Следующие изменения:
+
+urls.py
+import debug_toolbar
+from django.conf import settings
+```python
+if settings.DEBUG:
+    urlpatterns = [
+                      path('__debug__/', include(debug_toolbar.urls)),
+                      # другие URL-паттерны
+                  ] + urlpatterns
+
+```
+
+settings.py
+```python
+INSTALLED_APPS = [
+    # другие приложения
+    'debug_toolbar',
+]
+
+MIDDLEWARE = [
+    # другие middleware
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+
+INTERNAL_IPS = [
+         # ...
+         '127.0.0.1',
+         # ...
+     ]
+```

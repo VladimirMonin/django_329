@@ -51,6 +51,7 @@ class CardAdmin(admin.ModelAdmin):
     search_fields = ('question', 'category_id__name', 'answer', 'tags__name')
     ordering = ('-upload_date', 'question')
     list_per_page = 20
+    actions = ['mark_as_checked', 'mark_as_unchecked']
 
     # list_editable = ('category_name',) # Редактируемое поле
     # Добавляем метод для отображения названия категории
@@ -80,6 +81,15 @@ class CardAdmin(admin.ModelAdmin):
         return result_question
 
     get_questions.short_description = 'Вопрос'
+
+    @admin.action(description='Отметить как проверенные')
+    def mark_as_checked(self, request, queryset):
+        queryset.update(check_status=1)
+
+
+    @admin.action(description='Отметить как непроверенные')
+    def mark_as_unchecked(self, request, queryset):
+        queryset.update(check_status=0)
 
 
 @admin.register(Tag)

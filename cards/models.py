@@ -52,7 +52,7 @@ class Card(models.Model):
     card_id = models.AutoField(primary_key=True, db_column='CardID')
     question = models.TextField(db_column='Question')
     answer = models.TextField(db_column='Answer')
-    category_id = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, db_column='CategoryID')
+    category_id = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, db_column='CategoryID', verbose_name='Категория')
     upload_date = models.DateTimeField(auto_now_add=True, db_column='UploadDate', verbose_name='Дата загрузки')
     views = models.IntegerField(default=0, db_column='Views')
     favorites = models.IntegerField(default=0, db_column='Favorites')

@@ -16,6 +16,13 @@ model.choice - это класс, который позволяет создав
 """
 from django.db import models
 from django.urls import reverse
+import logging
+
+# Создаем или получаем экземпляр логгера
+logger = logging.getLogger(__name__)
+
+# Устанавливаем базовый уровень логирования. В продакшене вы можете выбрать уровень WARNING или ERROR
+logging.basicConfig(level=logging.DEBUG)
 
 
 class Category(models.Model):
@@ -57,7 +64,8 @@ class Card(models.Model):
     views = models.IntegerField(default=0, db_column='Views')
     favorites = models.IntegerField(default=0, db_column='Favorites')
     # Через map bool мы будем приводить 0 и 1 к False и True
-    check_status = models.BooleanField(choices=tuple(map(lambda x: (bool(x[0]), x[1]), Status.choices)), default=Status.UNCHECKED, db_column='CheckStatus')
+    check_status = models.BooleanField(choices=tuple(map(lambda x: (bool(x[0]), x[1]), Status.choices)),
+                                       default=Status.UNCHECKED, db_column='CheckStatus')
     # Непосредственное определение связи многие ко многим с моделью Tag
     tags = models.ManyToManyField('Tag', related_name='cards', through='CardTags')
 
@@ -76,6 +84,12 @@ class Card(models.Model):
     # reverse - возвращает URL по псевдониму
     def get_absolute_url(self):
         return reverse('detail_card_by_id', kwargs={'card_id': self.card_id})
+
+    def save(self, *args, **kwargs):
+        # Логируем перед сохранением объекта
+        logger.debug(f'Сохранение карточки {self.card_id}, значения: {self.__dict__}')
+
+        super().save(*args, **kwargs)  # Вызываем оригинальный метод save
 
 
 class CardTags(models.Model):

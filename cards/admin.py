@@ -44,7 +44,8 @@ class CheckStatusFilter(admin.SimpleListFilter):
 
 @admin.register(Card)
 class CardAdmin(admin.ModelAdmin):
-    list_display = ('get_questions', 'upload_date', 'category_name', 'tags_list', 'brief_info')
+    list_display = ('get_questions', 'check_status', 'upload_date', 'category_name', 'tags_list', 'brief_info')
+    list_editable = ('check_status',)
     list_display_links = ('get_questions',)
     list_filter = ('category_id', CheckStatusFilter)
     search_fields = ('question', 'category_id__name', 'answer', 'tags__name')

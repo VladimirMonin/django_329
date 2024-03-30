@@ -16,12 +16,12 @@ render(запрос, шаблон, контекст=None)
 """
 from django.db.models import F
 from django.http import HttpResponse
-from django.shortcuts import render
 from .models import Card
 from django.shortcuts import get_object_or_404
 from django.views.decorators.cache import cache_page
-
-
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from .forms import CardForm
 
 info = {
 
@@ -64,7 +64,8 @@ def catalog(request):
     order = request.GET.get('order', 'desc')  # по умолчанию используем убывающий порядок
 
     # Сопоставляем параметр сортировки с полями модели
-    valid_sort_fields = {'upload_date', 'views', 'favorites'}  # Исправил 'adds' на 'favorites', предполагая, что это опечатка
+    valid_sort_fields = {'upload_date', 'views',
+                         'favorites'}  # Исправил 'adds' на 'favorites', предполагая, что это опечатка
     if sort not in valid_sort_fields:
         sort = 'upload_date'  # Возвращаемся к сортировке по умолчанию, если передан неверный ключ сортировки
 
@@ -87,7 +88,6 @@ def catalog(request):
     return render(request, 'cards/catalog.html', context)
 
 
-
 def get_categories(request):
     """
     Возвращает все категории для представления в каталоге
@@ -101,6 +101,7 @@ def get_cards_by_category(request, slug):
     Возвращает карточки по категории для представления в каталоге
     """
     return HttpResponse(f'Cards by category {slug}')
+
 
 @cache_page(60 * 15)  # Кэширует на 15 минут
 def get_cards_by_tag(request, tag_id):
@@ -123,13 +124,31 @@ def get_cards_by_tag(request, tag_id):
 
 def get_detail_card_by_id(request, card_id):
     card_obj = get_object_or_404(Card.objects.prefetch_related('tags'), pk=card_id)
-    
+
     # Обновление счетчика просмотров
     Card.objects.filter(pk=card_id).update(views=F('views') + 1)
-    
+
     card = {
         "card": card_obj,
         "menu": info["menu"],
     }
 
     return render(request, 'cards/card_detail.html', card, status=200)
+
+
+def add_card(request):
+    if request.method == 'POST':
+        form = CardForm(request.POST)
+        if form.is_valid():
+            # Здесь вы можете обработать валидные данные формы
+            # Например, сохранить их в базе данных или как-то иначе использовать
+            # Пока что мы просто перенаправим на другую страницу
+            return HttpResponseRedirect('/')
+    else:
+        form = CardForm()
+        context = {
+            'form': form,
+            'menu': info['menu'],
+        }
+
+    return render(request, 'cards/add_card.html', context)

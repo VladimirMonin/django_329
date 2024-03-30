@@ -140,11 +140,36 @@ def add_card(request):
     if request.method == 'POST':
         form = CardForm(request.POST)
         if form.is_valid():
-            # Здесь вы можете обработать валидные данные формы
-            # Например, сохранить их в базе данных или как-то иначе использовать
-            # Пока что мы просто перенаправим на другую страницу
+            # Извлекаем данные для сохранения
+            card_answer = form.cleaned_data['answer']
+            card_question = form.cleaned_data['question']
+            card_category = form.cleaned_data['category']
+
+            # Проверяем, что карточка с таким вопросом еще не создана
+            if Card.objects.filter(question=card_question).exists():
+                form.add_error('question', 'Карточка с таким вопросом уже существует')
+                context = {
+                    'form': form,
+                    'menu': info['menu'],
+                }
+                return render(request, 'cards/add_card.html', context, status=400)
+
+
+            # Создаем новую карточку
+            card = Card.objects.create(
+                question=card_question,
+                answer=card_answer,
+                category_id=card_category
+            )
+
+            # Получаем ID созданной карточки
+            card_id = card.card_id
+
+            # Сохраняем карточку
+            card.save()
+
             # status 200 todo - изменить на 201, происходит редирект на самого себя?!
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect(f'/cards/{card_id}/detail/')
 
         else:
             # Если форма не валидна, вернем страницу с формой и ошибками

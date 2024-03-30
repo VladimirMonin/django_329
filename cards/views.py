@@ -145,9 +145,10 @@ def add_card(request):
             card_question = form.cleaned_data['question']
             card_category = form.cleaned_data['category']
 
-            # Проверяем, что карточка с таким вопросом еще не создана
-            if Card.objects.filter(question=card_question).exists():
-                form.add_error('question', 'Карточка с таким вопросом уже существует')
+            # Проверяем, существует ли карточка с таким вопросом, или с таким ответом
+            # Используем метод exists() для проверки наличия объектов в базе данных
+            if Card.objects.filter(question=card_question).exists() or Card.objects.filter(answer=card_answer).exists():
+                form.add_error('question', 'Карточка не может быть добавлена, так как уже существует карточка с таким вопросом или ответом')
                 context = {
                     'form': form,
                     'menu': info['menu'],

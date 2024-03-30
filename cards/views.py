@@ -143,7 +143,16 @@ def add_card(request):
             # Здесь вы можете обработать валидные данные формы
             # Например, сохранить их в базе данных или как-то иначе использовать
             # Пока что мы просто перенаправим на другую страницу
+            # status 200 todo - изменить на 201, происходит редирект на самого себя?!
             return HttpResponseRedirect('/')
+
+        else:
+            # Если форма не валидна, вернем страницу с формой и ошибками
+            context = {
+                'form': form,
+                'menu': info['menu'],
+            }
+            return render(request, 'cards/add_card.html', context, status=400)
     else:
         form = CardForm()
         context = {
@@ -151,4 +160,4 @@ def add_card(request):
             'menu': info['menu'],
         }
 
-    return render(request, 'cards/add_card.html', context)
+    return render(request, 'cards/add_card.html', context, status=200)

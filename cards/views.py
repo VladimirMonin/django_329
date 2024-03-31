@@ -63,7 +63,7 @@ def catalog(request):
     sort = request.GET.get('sort', 'upload_date')  # по умолчанию сортируем по дате загрузки
     order = request.GET.get('order', 'desc')  # по умолчанию используем убывающий порядок
     search_query = request.GET.get('search_query', '')  # поиск по вопросу
-
+    page_number = request.GET.get('page', 1)  # Номер страницы
     # Сопоставляем параметр сортировки с полями модели
     valid_sort_fields = {'upload_date', 'views',
                          'favorites'}  # Исправил 'adds' на 'favorites', предполагая, что это опечатка
@@ -91,13 +91,14 @@ def catalog(request):
         cards = Card.objects.prefetch_related('tags').filter(Q(question__icontains=search_query) | Q(tags__name__icontains=search_query) | Q(answer__icontains=search_query)).order_by(order_by).distinct()
 
     # Создаем объект пагинатора
-
+    paginator = Paginator(cards, 30)
+    page_obj = paginator.get_page(page_number)
     context = {
-        'cards': cards,
-        'cards_count': len(cards),
+        'cards': page_obj,  # Передаем объект страницы в контекст
         'sort': sort,  # Добавлено для возможности отображения текущей сортировки в шаблоне
         'order': order,  # Добавлено для возможности отображения текущего порядка в шаблоне
         'menu': info['menu'],  # Добавлено для отображения меню на странице
+        'page_obj': page_obj,  # Добавлено для передачи объекта страницы в шаблон
     }
     return render(request, 'cards/catalog.html', context)
 

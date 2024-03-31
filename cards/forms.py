@@ -42,6 +42,6 @@ class CardModelForm(forms.ModelForm):
             if not tag_name:
                 continue
             tag, _ = Tag.objects.get_or_create(name=tag_name)
-            instance.tags.add(tag)
+            instance.tags.add(tag.tag_id)
 
         return instance

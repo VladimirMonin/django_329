@@ -33,15 +33,19 @@ class CardModelForm(forms.ModelForm):
         # Сохранение карточки вместе с тегами
         # commit=False - отключает сохранение формы, чтобы мы могли добавить теги
         # instance = super().save(commit=False) # Получаем экземпляр модели Card , без сохранения в базу
-        instance = super().save()  # Но сохраняем в базу, потому что многие-ко-многим нуждаются в ID
+          # Но сохраняем в базу, потому что многие-ко-многим нуждаются в ID
 
         # Обрабатываем теги
         tag_names = self.cleaned_data['tags']
+        tag_objects = []
         for tag_name in tag_names:
             tag_name = tag_name.strip()
             if not tag_name:
                 continue
             tag, _ = Tag.objects.get_or_create(name=tag_name)
-            instance.tags.add(tag.tag_id)
+            tag_objects.append(tag)
 
+        # Добавляем теги к карточке
+        self.tags = tag_objects
+        instance = super().save(*args, **kwargs)
         return instance

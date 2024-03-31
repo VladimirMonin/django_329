@@ -1,18 +1,49 @@
 <!-- cards/templates/cards/catalog.html -->
 <!-- Использует шаблон cards/templates/cards/include/card_preview.html -->
 {% extends "base.html" %}
+{% block head %}
+<style>
+/* Стили для темной темы пагинации */
+.pagination-dark .page-link {
+  background-color: #343a40; /* Темный фон для ссылок */
+  color: #ffffff; /* Белый текст */
+}
+.pagination-dark .page-link:hover {
+  background-color: #495057; /* Светлее при наведении */
+}
+.pagination-dark .page-item.active .page-link {
+  background-color: #212529 !important; /* Очень темный фон для активной ссылки */
+  border-color: #212529 !important; /* Очень темный бордюр для активной ссылки */
+}
+.pagination-dark .page-item.active .page-link:hover {
+  background-color: #32383e !important; /* Немного светлее цвет фона при наведении */
+  border-color: #32383e !important; /* Цвет границы при наведении */
+}
+/* Стили для радиокнопок */
+.form-check-input:checked {
+  background-color: #212529 !important; /* Очень темный фон для активной радиокнопки */
+  border-color: #212529 !important; /* Очень темный бордюр для активной радиокнопки */
+}
+</style>
+
+{% endblock %}
 {% block content %}
+<div class="text-dark bg-light">
 <h1>Каталог карточек Anki для интервального повторения</h1>
-<nav aria-label="Page navigation">
-  <ul class="pagination">
+
+<nav aria-label="Page navigation" class="text-dark">
+  <ul class="pagination pagination-dark">
     {% if page_obj.has_previous %}
-      <li class="page-item"><a class="page-link link-secondary" href="?page={{ page_obj.previous_page_number }}&sort={{ sort }}&order={{ order }}">Предыдущая</a></li>
+      <li class="page-item"><a class="page-link text-white bg-secondary" href="?page={{ page_obj.previous_page_number }}&sort={{ sort }}&order={{ order }}">Предыдущая</a></li>
     {% endif %}
-    {% for num in page_obj.paginator.page_range %}
-      <li class="page-item {% if page_obj.number == num %}active{% endif %}"><a class="page-link link-secondary" href="?page={{ num }}&sort={{ sort }}&order={{ order }}">{{ num }}</a></li>
+{% for num in page_obj.paginator.page_range %}
+  <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+    <a class="page-link text-white bg-secondary" href="?page={{ num }}&sort={{ sort }}&order={{ order }}">{{ num }}</a>
+  </li>
 {% endfor %}
+
 {% if page_obj.has_next %}
-<li class="page-item"><a class="page-link link-secondary" href="?page={{ page_obj.next_page_number }}&sort={{ sort }}&order={{ order }}">Следующая</a></li>
+<li class="page-item"><a class="page-link text-white bg-secondary" href="?page={{ page_obj.next_page_number }}&sort={{ sort }}&order={{ order }}">Следующая</a></li>
 {% endif %}
 
   </ul>
@@ -27,21 +58,21 @@
   </div>
 
   <!-- Радиокнопки для сортировки -->
-  <div class="mb-3">
+  <div class="mb-1 d-flex justify-content-start">
     <div><strong>Сортировать по:</strong></div>
-    <div class="form-check">
+    <div class="form-check ms-2">
       <input class="form-check-input" type="radio" name="sort" id="sortUploadDate" value="upload_date" checked>
       <label class="form-check-label" for="sortUploadDate">
         Дате загрузки
       </label>
     </div>
-    <div class="form-check">
+    <div class="form-check ms-2">
       <input class="form-check-input" type="radio" name="sort" id="sortViews" value="views">
       <label class="form-check-label" for="sortViews">
         Просмотрам
       </label>
     </div>
-    <div class="form-check">
+    <div class="form-check ms-2">
       <input class="form-check-input" type="radio" name="sort" id="sortFavorites" value="favorites">
       <label class="form-check-label" for="sortFavorites">
         Избранному
@@ -50,22 +81,23 @@
   </div>
   <!-- Радиокнопки для выбора направления сортировки  
     order: порядок сортировки ('asc' для возрастания, 'desc' для убывания; по умолчанию 'desc'). -->
-    {% comment %} Дадим тут инлайновость для этой формы {% endcomment %}
-    <div class="mb-3">
+
+    <div class="mb-1 d-flex justify-content-start">
       <div><strong>Порядок сортировки:</strong></div>
-      <div class="form-check">
+      <div class="form-check ms-2">
         <input class="form-check-input" type="radio" name="order" id="sortOrderDesc" value="desc" checked>
         <label class="form-check-label" for="sortUploadDate">
           Убыванию
         </label>
       </div>
-      <div class="form-check">
+      <div class="form-check ms-2">
         <input class="form-check-input" type="radio" name="order" id="sortOrderAsc" value="asc">
         <label class="form-check-label" for="sortViews">
           Возрастанию
         </label>
       </div>
 </form>
+</div>
 
 
 

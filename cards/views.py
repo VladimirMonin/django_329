@@ -14,7 +14,7 @@ render(запрос, шаблон, контекст=None)
     Возвращает объект HttpResponse с отрендеренным шаблоном шаблон и контекстом контекст.
     Если контекст не передан, используется пустой словарь.
 """
-from django.db.models import F
+from django.db.models import F, Q
 from django.http import HttpResponse
 from .models import Card
 from django.shortcuts import get_object_or_404, redirect
@@ -51,7 +51,7 @@ def about(request):
     return render(request, 'about.html', info)
 
 
-@cache_page(60 * 15)  # Кэширует на 15 минут
+# @cache_page(60 * 15)  # Кэширует на 15 минут
 def catalog(request):
     """
     Функция для отображения каталога карточек с возможностью сортировки.
@@ -62,6 +62,7 @@ def catalog(request):
     # Считываем параметры из GET запроса
     sort = request.GET.get('sort', 'upload_date')  # по умолчанию сортируем по дате загрузки
     order = request.GET.get('order', 'desc')  # по умолчанию используем убывающий порядок
+    search_query = request.GET.get('search_query', '')  # поиск по вопросу
 
     # Сопоставляем параметр сортировки с полями модели
     valid_sort_fields = {'upload_date', 'views',
@@ -75,8 +76,20 @@ def catalog(request):
     else:
         order_by = f'-{sort}'
 
-    # Получаем отсортированные карточки через ЖАДНУЮ ЗАГРУЗКУ
-    cards = Card.objects.prefetch_related('tags').order_by(order_by)
+    if not search_query:
+        # Получаем отсортированные карточки через ЖАДНУЮ ЗАГРУЗКУ
+        cards = Card.objects.prefetch_related('tags').order_by(order_by)
+
+    else:
+        # Фильтруем карточки по вопросу
+        # cards = Card.objects.filter(question__icontains=search_query).prefetch_related('tags').order_by(order_by)
+
+        # Жадная загрузка с использованием фильтра и Q-объектов (содержание в вопросе или ответе)
+        # cards = Card.objects.prefetch_related('tags').filter(Q(question__icontains=search_query) | Q(answer__icontains=search_query)).order_by(order_by)
+
+        # Жадная загрузка с использованием фильтра и Q-объектов (содержание в вопросе или совпадение с тегом) уникальные объекты
+        cards = Card.objects.prefetch_related('tags').filter(Q(question__icontains=search_query) | Q(tags__name__icontains=search_query) | Q(answer__icontains=search_query)).order_by(order_by).distinct()
+
 
     context = {
         'cards': cards,
@@ -135,60 +148,6 @@ def get_detail_card_by_id(request, card_id):
 
     return render(request, 'cards/card_detail.html', card, status=200)
 
-
-# def add_card(request):
-#     if request.method == 'POST':
-#         form = CardModelForm(request.POST)
-#         if form.is_valid():
-#             # Извлекаем данные для сохранения
-#             # cleaned_data - это словарь, содержащий все данные формы, которые прошли валидацию
-#             card_answer = form.cleaned_data['answer']
-#             card_question = form.cleaned_data['question']
-#             card_category = form.cleaned_data['category']
-#
-#             # Проверяем, существует ли карточка с таким вопросом, или с таким ответом
-#             # Используем метод exists() для проверки наличия объектов в базе данных
-#             if Card.objects.filter(question=card_question).exists() or Card.objects.filter(answer=card_answer).exists():
-#                 form.add_error('question', 'Карточка не может быть добавлена, так как уже существует карточка с таким вопросом или ответом')
-#                 context = {
-#                     'form': form,
-#                     'menu': info['menu'],
-#                 }
-#                 return render(request, 'cards/add_card.html', context, status=400)
-#
-#
-#             # Создаем новую карточку
-#             card = Card.objects.create(
-#                 question=card_question,
-#                 answer=card_answer,
-#                 category_id=card_category
-#             )
-#
-#             # Получаем ID созданной карточки
-#             card_id = card.card_id
-#
-#             # Сохраняем карточку
-#             card.save()
-#
-#             # status 200 todo - изменить на 201, происходит редирект на самого себя?!
-#             return HttpResponseRedirect(f'/cards/{card_id}/detail/')
-#
-#         else:
-#             # Если форма не валидна, вернем страницу с формой и ошибками
-#             context = {
-#                 'form': form,
-#                 'menu': info['menu'],
-#             }
-#             return render(request, 'cards/add_card.html', context, status=400)
-#     else:
-#         form = CardModelForm()
-#         context = {
-#             'form': form,
-#             'menu': info['menu'],
-#         }
-#
-#     return render(request, 'cards/add_card.html', context, status=200)
-#
 
 def add_card(request):
     if request.method == 'POST':

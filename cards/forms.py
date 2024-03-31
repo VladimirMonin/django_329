@@ -23,29 +23,20 @@ class CardModelForm(forms.ModelForm):
             'answer': 'Ответ',
         }
 
-    def clean_tags(self) -> list:
-        # Валидация и преобразование строки тегов в список тегов
-        tags_str = self.cleaned_data['tags']
-        tag_list = [tag.strip() for tag in tags_str.split(',') if tag.strip()]
-        return tag_list
-
     def save(self, *args, **kwargs):
-        # Сохранение карточки вместе с тегами
-        # commit=False - отключает сохранение формы, чтобы мы могли добавить теги
-        # instance = super().save(commit=False) # Получаем экземпляр модели Card , без сохранения в базу
-          # Но сохраняем в базу, потому что многие-ко-многим нуждаются в ID
+        # Сохраняем объект Card без коммита тегов, потому что для этого нужен ID объекта Card.
+        instance = super().save(commit=False)
+        instance.save()
+
+        self.instance.tags.clear()  # Очищаем текущие теги, чтобы избежать дублирования
 
         # Обрабатываем теги
-        tag_names = self.cleaned_data['tags']
-        tag_objects = []
+        tag_names = self.cleaned_data['tags'].split(',')
         for tag_name in tag_names:
             tag_name = tag_name.strip()
-            if not tag_name:
-                continue
-            tag, _ = Tag.objects.get_or_create(name=tag_name)
-            tag_objects.append(tag)
+            if tag_name:  # Проверяем, не пустая ли строка после удаления пробелов
+                tag, created = Tag.objects.get_or_create(name=tag_name)
+                self.instance.tags.add(tag)
 
-        # Добавляем теги к карточке
-        self.tags = tag_objects
-        instance = super().save(*args, **kwargs)
         return instance
+

@@ -21,8 +21,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.cache import cache_page
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .forms import CardForm, CardModelForm
-
+from .forms import CardModelForm
+from django.core.paginator import Paginator
 info = {
 
     "menu": [
@@ -90,6 +90,7 @@ def catalog(request):
         # Жадная загрузка с использованием фильтра и Q-объектов (содержание в вопросе или совпадение с тегом) уникальные объекты
         cards = Card.objects.prefetch_related('tags').filter(Q(question__icontains=search_query) | Q(tags__name__icontains=search_query) | Q(answer__icontains=search_query)).order_by(order_by).distinct()
 
+    # Создаем объект пагинатора
 
     context = {
         'cards': cards,

@@ -17,11 +17,11 @@ render(запрос, шаблон, контекст=None)
 from django.db.models import F
 from django.http import HttpResponse
 from .models import Card
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.cache import cache_page
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .forms import CardForm
+from .forms import CardForm, CardModelForm
 
 info = {
 
@@ -136,55 +136,74 @@ def get_detail_card_by_id(request, card_id):
     return render(request, 'cards/card_detail.html', card, status=200)
 
 
+# def add_card(request):
+#     if request.method == 'POST':
+#         form = CardModelForm(request.POST)
+#         if form.is_valid():
+#             # Извлекаем данные для сохранения
+#             # cleaned_data - это словарь, содержащий все данные формы, которые прошли валидацию
+#             card_answer = form.cleaned_data['answer']
+#             card_question = form.cleaned_data['question']
+#             card_category = form.cleaned_data['category']
+#
+#             # Проверяем, существует ли карточка с таким вопросом, или с таким ответом
+#             # Используем метод exists() для проверки наличия объектов в базе данных
+#             if Card.objects.filter(question=card_question).exists() or Card.objects.filter(answer=card_answer).exists():
+#                 form.add_error('question', 'Карточка не может быть добавлена, так как уже существует карточка с таким вопросом или ответом')
+#                 context = {
+#                     'form': form,
+#                     'menu': info['menu'],
+#                 }
+#                 return render(request, 'cards/add_card.html', context, status=400)
+#
+#
+#             # Создаем новую карточку
+#             card = Card.objects.create(
+#                 question=card_question,
+#                 answer=card_answer,
+#                 category_id=card_category
+#             )
+#
+#             # Получаем ID созданной карточки
+#             card_id = card.card_id
+#
+#             # Сохраняем карточку
+#             card.save()
+#
+#             # status 200 todo - изменить на 201, происходит редирект на самого себя?!
+#             return HttpResponseRedirect(f'/cards/{card_id}/detail/')
+#
+#         else:
+#             # Если форма не валидна, вернем страницу с формой и ошибками
+#             context = {
+#                 'form': form,
+#                 'menu': info['menu'],
+#             }
+#             return render(request, 'cards/add_card.html', context, status=400)
+#     else:
+#         form = CardModelForm()
+#         context = {
+#             'form': form,
+#             'menu': info['menu'],
+#         }
+#
+#     return render(request, 'cards/add_card.html', context, status=200)
+#
+
 def add_card(request):
     if request.method == 'POST':
-        form = CardForm(request.POST)
+        form = CardModelForm(request.POST)
         if form.is_valid():
-            # Извлекаем данные для сохранения
-            # cleaned_data - это словарь, содержащий все данные формы, которые прошли валидацию
-            card_answer = form.cleaned_data['answer']
-            card_question = form.cleaned_data['question']
-            card_category = form.cleaned_data['category']
+            card = form.save()
+            # Редирект на страницу созданной карточки после успешного сохранения
+            return redirect(card.get_absolute_url())
 
-            # Проверяем, существует ли карточка с таким вопросом, или с таким ответом
-            # Используем метод exists() для проверки наличия объектов в базе данных
-            if Card.objects.filter(question=card_question).exists() or Card.objects.filter(answer=card_answer).exists():
-                form.add_error('question', 'Карточка не может быть добавлена, так как уже существует карточка с таким вопросом или ответом')
-                context = {
-                    'form': form,
-                    'menu': info['menu'],
-                }
-                return render(request, 'cards/add_card.html', context, status=400)
-
-
-            # Создаем новую карточку
-            card = Card.objects.create(
-                question=card_question,
-                answer=card_answer,
-                category_id=card_category
-            )
-
-            # Получаем ID созданной карточки
-            card_id = card.card_id
-
-            # Сохраняем карточку
-            card.save()
-
-            # status 200 todo - изменить на 201, происходит редирект на самого себя?!
-            return HttpResponseRedirect(f'/cards/{card_id}/detail/')
-
-        else:
-            # Если форма не валидна, вернем страницу с формой и ошибками
-            context = {
-                'form': form,
-                'menu': info['menu'],
-            }
-            return render(request, 'cards/add_card.html', context, status=400)
     else:
-        form = CardForm()
-        context = {
-            'form': form,
-            'menu': info['menu'],
-        }
+        form = CardModelForm()
 
-    return render(request, 'cards/add_card.html', context, status=200)
+    context = {
+        'form': form,
+        'menu': info['menu'],
+    }
+
+    return render(request, 'cards/add_card.html', context)

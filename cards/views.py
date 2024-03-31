@@ -141,6 +141,7 @@ def add_card(request):
         form = CardForm(request.POST)
         if form.is_valid():
             # Извлекаем данные для сохранения
+            # cleaned_data - это словарь, содержащий все данные формы, которые прошли валидацию
             card_answer = form.cleaned_data['answer']
             card_question = form.cleaned_data['question']
             card_category = form.cleaned_data['category']

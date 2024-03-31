@@ -59,7 +59,7 @@ class CardAdmin(admin.ModelAdmin):
     # Добавляем метод для отображения названия категории
     @admin.display(description="Категория", ordering='category_id__name')
     def category_name(self, obj):
-        return obj.category_id.name
+        return obj.category_id.name if obj.category_id else 'Без категории'
 
     # Дополнительный метод для отображения списка тегов
     @admin.display(description="Теги", ordering='tags__name')

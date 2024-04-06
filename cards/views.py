@@ -24,6 +24,7 @@ from django.shortcuts import render
 from .forms import CardModelForm
 from django.core.paginator import Paginator
 from django.template.loader import render_to_string
+from django.views import View
 
 info = {
 
@@ -170,6 +171,34 @@ def add_card(request):
     }
 
     return render(request, 'cards/add_card.html', context)
+
+
+class AddCardView(View):
+    # Метод для обработки GET-запросов
+    def get(self, request, *args, **kwargs):
+        form = CardModelForm()  # Создаем пустую форму
+        context = {
+            'form': form,
+            # предполагаем, что info['menu'] - это данные, необходимые для отображения меню на странице
+            'menu': info['menu'],  
+        }
+        return render(request, 'cards/add_card.html', context)
+    
+    # Метод для обработки POST-запросов
+    def post(self, request, *args, **kwargs):
+        form = CardModelForm(request.POST)
+        if form.is_valid():
+            card = form.save()  # Сохраняем форму, если она валидна
+            # Перенаправляем пользователя на страницу созданной карточки
+            return redirect(card.get_absolute_url())
+        else:
+            # Если форма не валидна, возвращаем ее обратно в шаблон с ошибками
+            context = {
+                'form': form,
+                'menu': info['menu'],
+            }
+            return render(request, 'cards/add_card.html', context)
+
 
 
 def preview_card_ajax(request):

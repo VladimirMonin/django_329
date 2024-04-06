@@ -337,3 +337,8 @@ INTERNAL_IPS = [
 
 
 - `iconv -f utf-16 -t utf-8 source.json > converted_source.json` - конвертация файла из utf-16 в utf-8 если будут проблемы с кодировкой
+
+- Создал `dump.json` c помощью `python manage.py dumpdata cards > dump.json`
+
+
+**commit: `lesson_65: дамп и загрузка данных в JSON формате`**

@@ -42,18 +42,37 @@ class CheckStatusFilter(admin.SimpleListFilter):
             return queryset.filter(check_status=1)
 
 
+class CardCodeFilter(admin.SimpleListFilter):
+    title = 'Наличие кода'
+    parameter_name = 'has_code'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('yes', 'Да'),
+            ('no', 'Нет'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'yes':
+            return queryset.filter(answer__contains='```')
+        elif self.value() == 'no':
+            return queryset.exclude(answer__contains='```')
+
+
 @admin.register(Card)
 class CardAdmin(admin.ModelAdmin):
     list_display = ('get_questions', 'check_status', 'upload_date', 'category_name', 'tags_list', 'brief_info')
     list_editable = ('check_status',)
     list_display_links = ('get_questions',)
-    list_filter = ('category_id', CheckStatusFilter)
+    list_filter = ('category_id', CheckStatusFilter, CardCodeFilter)
     search_fields = ('question', 'category_id__name', 'answer', 'tags__name')
     ordering = ('-upload_date', 'question')
     list_per_page = 20
     actions = ['mark_as_checked', 'mark_as_unchecked']
     fields = ('question', 'answer', 'category_id') #TODO tags - ошибка из за "through" - надо переделывать модель многие ко многим
     # filter_horizontal = ('tags',)
+
+    change_form_template = 'admin/cards/change_form_custom.html'
 
     # list_editable = ('category_name',) # Редактируемое поле
     # Добавляем метод для отображения названия категории

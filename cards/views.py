@@ -15,7 +15,7 @@ render(запрос, шаблон, контекст=None)
     Если контекст не передан, используется пустой словарь.
 """
 from django.db.models import F, Q
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import Card
 from django.shortcuts import get_object_or_404, redirect
 from django.views.decorators.cache import cache_page
@@ -23,6 +23,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from .forms import CardModelForm
 from django.core.paginator import Paginator
+from django.template.loader import render_to_string
+
 info = {
 
     "menu": [
@@ -168,3 +170,26 @@ def add_card(request):
     }
 
     return render(request, 'cards/add_card.html', context)
+
+
+def preview_card_ajax(request):
+    if request.method == "POST":
+        question = request.POST.get('question', '')
+        answer = request.POST.get('answer', '')
+        category = request.POST.get('category', '')
+
+        # Генерация HTML для предварительного просмотра
+        html_content = render_to_string('cards/card_detail.html', {
+            'card': {
+                'question': question,
+                'answer': answer,
+                'category': 'Тестовая категория',
+                'tags': ['тест', 'тег'],
+
+            }
+        }
+                                        )
+
+        return JsonResponse({'html': html_content})
+    # return JsonResponse({'error': 'Invalid request'}, status=400)
+    return HttpResponseRedirect('/cards/add/')

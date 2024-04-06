@@ -326,7 +326,7 @@ INTERNAL_IPS = [
 **commit: `lesson_65: добавление предпросмотра карточек в админке и в представлении`**
 
 - Как сделать дамп базы в JSON формате?
-- `python manage.py dumpdata > cards/fixtures/cards.json` - сделает дамп всех данных в JSON формате
+- `python -Xutf8 manage.py dumpdata --indent=2 > dump.json` - сделает дамп всех данных в JSON формате
 - Сделаем это для django app `cards`
 - `python manage.py dumpdata cards > cards/fixtures/cards.json` - сделает дамп данных только для приложения `cards`
 

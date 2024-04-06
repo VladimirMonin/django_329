@@ -25,6 +25,7 @@ from .forms import CardModelForm
 from django.core.paginator import Paginator
 from django.template.loader import render_to_string
 from django.views import View
+from django.views.generic import TemplateView
 
 info = {
 
@@ -42,16 +43,18 @@ info = {
 }
 
 
-def index(request):
-    """Функция для отображения главной страницы
-    будет возвращать рендер шаблона root/templates/main.html"""
-    return render(request, "main.html", info)
+class IndexView(TemplateView):
+    template_name = 'main.html'  # Указываем имя шаблона для отображения
+    # Предполагаем, что info - это словарь с данными, который мы хотим передать в шаблон
+    extra_context = info
+
+class AboutView(TemplateView):
+    template_name = 'about.html'  # Аналогично указываем имя шаблона
+    extra_context = info
 
 
-def about(request):
-    """Функция для отображения страницы "О проекте"
-    будет возвращать рендер шаблона /root/templates/about.html"""
-    return render(request, 'about.html', info)
+
+
 
 
 # @cache_page(60 * 15)  # Кэширует на 15 минут

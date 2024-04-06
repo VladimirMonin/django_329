@@ -12,3 +12,4 @@ urlpatterns = [
     path('add/', views.AddCardView.as_view(), name='add_card'),  # Добавление карточки
     path('preview_card_ajax/', views.preview_card_ajax, name='preview_card_ajax'),
 ]
+

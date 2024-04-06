@@ -26,7 +26,7 @@ from django.core.paginator import Paginator
 from django.template.loader import render_to_string
 from django.views import View
 from django.views.generic import TemplateView
-
+from django.views.generic.list import ListView
 info = {
 
     "menu": [
@@ -109,6 +109,50 @@ def catalog(request):
     return render(request, 'cards/catalog.html', context)
 
 
+class CatalogView(ListView):
+    model = Card  # Указываем модель, данные которой мы хотим отобразить
+    template_name = 'cards/catalog.html'  # Путь к шаблону, который будет использоваться для отображения страницы
+    context_object_name = 'cards'  # Имя переменной контекста, которую будем использовать в шаблоне
+    paginate_by = 30  # Количество объектов на странице
+
+    # Метод для модификации начального запроса к БД
+    def get_queryset(self):
+        # Получение параметров сортировки из GET-запроса
+        sort = self.request.GET.get('sort', 'upload_date')
+        order = self.request.GET.get('order', 'desc')
+        search_query = self.request.GET.get('search_query', '')
+
+        # Определение направления сортировки
+        if order == 'asc':
+            order_by = sort
+        else:
+            order_by = f'-{sort}'
+
+        # Фильтрация карточек по поисковому запросу и сортировка
+        if search_query:
+            queryset = Card.objects.filter(
+                Q(question__icontains=search_query) |
+                Q(answer__icontains=search_query) |
+                Q(tags__name__icontains=search_query)
+            ).distinct().order_by(order_by)
+        else:
+            queryset = Card.objects.all().order_by(order_by)
+        return queryset
+
+    # Метод для добавления дополнительного контекста
+    def get_context_data(self, **kwargs):
+        # Получение существующего контекста из базового класса
+        context = super().get_context_data(**kwargs)
+        # Добавление дополнительных данных в контекст
+        context['sort'] = self.request.GET.get('sort', 'upload_date')
+        context['order'] = self.request.GET.get('order', 'desc')
+        context['search_query'] = self.request.GET.get('search_query', '')
+        # Добавление статических данных в контекст, если это необходимо
+        context['menu'] = info['menu'] # Пример добавления статических данных в контекст
+        return context
+
+
+
 def get_categories(request):
     """
     Возвращает все категории для представления в каталоге
@@ -155,25 +199,6 @@ def get_detail_card_by_id(request, card_id):
     }
 
     return render(request, 'cards/card_detail.html', card, status=200)
-
-
-def add_card(request):
-    if request.method == 'POST':
-        form = CardModelForm(request.POST)
-        if form.is_valid():
-            card = form.save()
-            # Редирект на страницу созданной карточки после успешного сохранения
-            return redirect(card.get_absolute_url())
-
-    else:
-        form = CardModelForm()
-
-    context = {
-        'form': form,
-        'menu': info['menu'],
-    }
-
-    return render(request, 'cards/add_card.html', context)
 
 
 class AddCardView(View):

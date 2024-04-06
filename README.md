@@ -353,3 +353,8 @@ INTERNAL_IPS = [
 - Подключили его в `urls.py` через `as_view()`
 
 **commit: `lesson_65: добавление класса представления для главной страницы и about`**
+
+- class CatalogView(ListView)
+- Подключили его в `urls.py` через `as_view()`
+
+**commit: `lesson_65: добавление класса представления для каталога карточек`**

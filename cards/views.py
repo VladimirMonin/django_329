@@ -162,6 +162,17 @@ class CardDetailView(DetailView):
         context['menu'] = info['menu']
         return context
 
+    # Метод для обновления счетчика просмотров при каждом отображении детальной страницы карточки
+    def get_object(self, queryset=None):
+        # Получаем объект с учетом переданных в URL параметров (в данном случае, pk или id карточки)
+        obj = super().get_object(queryset=queryset)
+        # Увеличиваем счетчик просмотров на 1 с помощью F-выражения для избежания гонки условий
+        Card.objects.filter(pk=obj.pk).update(views=F('views') + 1)
+
+        # Получаем обновленный объект из БД (+1 запрос в БД)
+        obj.refresh_from_db()
+        return obj
+
 
 
 

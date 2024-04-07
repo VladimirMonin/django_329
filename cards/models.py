@@ -83,7 +83,7 @@ class Card(models.Model):
     # Псевдоним - detail_card_by_id
     # reverse - возвращает URL по псевдониму
     def get_absolute_url(self):
-        return reverse('detail_card_by_id', kwargs={'card_id': self.card_id})
+        return reverse('detail_card_by_id', kwargs={'pk': self.card_id})
 
     def save(self, *args, **kwargs):
         # Логируем перед сохранением объекта

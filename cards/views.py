@@ -29,7 +29,7 @@ from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
 
 
@@ -177,6 +177,21 @@ class CardDetailView(DetailView):
         obj.refresh_from_db()
         return obj
 
+
+class CardUpdateView(UpdateView):
+    model = Card  # Указываем модель, с которой работает представление
+    form_class = CardModelForm  # Указываем класс формы для создания карточки
+    template_name = 'cards/add_card.html'  # Указываем шаблон, который будет использоваться для отображения формы
+    
+    # После успешного обновления карточки, пользователь будет перенаправлен на страницу этой карточки
+    def get_success_url(self):
+        return reverse_lazy('catalog', kwargs={'pk': self.object.pk})
+
+    def get_context_data(self, **kwargs):
+        # Добавляем дополнительные данные в контекст, например, для отображения меню
+        context = super().get_context_data(**kwargs)
+        context['menu'] = info['menu']  # предполагается, что переменная info доступна
+        return context
 
 
 class AddCardCreateView(CreateView):

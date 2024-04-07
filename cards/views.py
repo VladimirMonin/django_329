@@ -28,6 +28,7 @@ from django.template.loader import render_to_string
 from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 info = {
 
     "menu": [
@@ -58,7 +59,7 @@ class CatalogView(ListView):
     model = Card  # Указываем модель, данные которой мы хотим отобразить
     template_name = 'cards/catalog.html'  # Путь к шаблону, который будет использоваться для отображения страницы
     context_object_name = 'cards'  # Имя переменной контекста, которую будем использовать в шаблоне
-    paginate_by = 20  # Количество объектов на странице
+    paginate_by = 30  # Количество объектов на странице
 
     # Метод для модификации начального запроса к БД
     def get_queryset(self):
@@ -149,6 +150,20 @@ def get_detail_card_by_id(request, card_id):
     }
 
     return render(request, 'cards/card_detail.html', card, status=200)
+
+
+class CardDetailView(DetailView):
+    model = Card
+    template_name = 'cards/card_detail.html'
+    context_object_name = 'card'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = info['menu']
+        return context
+
+
+
 
 
 class AddCardView(View):

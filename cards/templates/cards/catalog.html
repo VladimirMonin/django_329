@@ -38,7 +38,7 @@
     {% endif %}
 {% for num in page_obj.paginator.page_range %}
   <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-    <a class="page-link text-white bg-secondary" href="?page={{ num }}&sort={{ sort }}&order={{ order }}">{{ num }}</a>
+    <a class="page-link text-white bg-secondary" href="?page={{ num }}&sort={{ sort }}&order={{ order }}&search_query={{ search_query }}">{{ num }}</a>
   </li>
 {% endfor %}
 

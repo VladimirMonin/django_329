@@ -48,6 +48,14 @@ info = {
     ],
 }
 
+class MenuMixin:
+    def get_context_data(self, **kwargs):
+        # Вызываем родительский метод, чтобы получить контекст представления
+        context = super().get_context_data(**kwargs)
+        # Добавляем информацию о меню в контекст
+        context['menu'] = info['menu']
+        return context
+
 
 class IndexView(TemplateView):
     template_name = 'main.html'  # Указываем имя шаблона для отображения
@@ -59,7 +67,7 @@ class AboutView(TemplateView):
     extra_context = info
 
 # @cache_page(60 * 15)  # Кэширует на 15 минут
-class CatalogView(ListView):
+class CatalogView(MenuMixin, ListView):
     model = Card  # Указываем модель, данные которой мы хотим отобразить
     template_name = 'cards/catalog.html'  # Путь к шаблону, который будет использоваться для отображения страницы
     context_object_name = 'cards'  # Имя переменной контекста, которую будем использовать в шаблоне
@@ -102,8 +110,7 @@ class CatalogView(ListView):
         context['sort'] = self.request.GET.get('sort', 'upload_date')
         context['order'] = self.request.GET.get('order', 'desc')
         context['search_query'] = self.request.GET.get('search_query', '')
-        # Добавление статических данных в контекст, если это необходимо
-        context['menu'] = info['menu'] # Пример добавления статических данных в контекст
+
         return context
 
 
@@ -156,15 +163,10 @@ def get_detail_card_by_id(request, card_id):
     return render(request, 'cards/card_detail.html', card, status=200)
 
 
-class CardDetailView(DetailView):
+class CardDetailView(MenuMixin, DetailView):
     model = Card
     template_name = 'cards/card_detail.html'
     context_object_name = 'card'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['menu'] = info['menu']
-        return context
 
     # Метод для обновления счетчика просмотров при каждом отображении детальной страницы карточки
     def get_object(self, queryset=None):
@@ -178,7 +180,7 @@ class CardDetailView(DetailView):
         return obj
 
 
-class CardUpdateView(UpdateView):
+class CardUpdateView(MenuMixin, UpdateView):
     model = Card  # Указываем модель, с которой работает представление
     form_class = CardModelForm  # Указываем класс формы для создания карточки
     template_name = 'cards/add_card.html'  # Указываем шаблон, который будет использоваться для отображения формы
@@ -187,14 +189,8 @@ class CardUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('catalog', kwargs={'pk': self.object.pk})
 
-    def get_context_data(self, **kwargs):
-        # Добавляем дополнительные данные в контекст, например, для отображения меню
-        context = super().get_context_data(**kwargs)
-        context['menu'] = info['menu']  # предполагается, что переменная info доступна
-        return context
 
-
-class AddCardCreateView(CreateView):
+class AddCardCreateView(MenuMixin, CreateView):
     model = Card  # Указываем модель, с которой работает представление
     form_class = CardModelForm  # Указываем класс формы для создания карточки
     template_name = 'cards/add_card.html'  # Указываем шаблон, который будет использоваться для отображения формы
@@ -205,12 +201,6 @@ class AddCardCreateView(CreateView):
         # Здесь можно добавить дополнительную логику обработки данных формы перед сохранением объекта
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        # Метод для добавления дополнительных данных в контекст шаблона
-        context = super().get_context_data(**kwargs)
-        # Добавляем в контекст информацию о меню, предполагая, что 'info' доступен в контексте
-        context['menu'] = info['menu']
-        return context
 
 
 

@@ -29,6 +29,10 @@ from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
+
+
 info = {
 
     "menu": [
@@ -175,33 +179,23 @@ class CardDetailView(DetailView):
 
 
 
+class AddCardCreateView(CreateView):
+    model = Card  # Указываем модель, с которой работает представление
+    form_class = CardModelForm  # Указываем класс формы для создания карточки
+    template_name = 'cards/add_card.html'  # Указываем шаблон, который будет использоваться для отображения формы
+    success_url = reverse_lazy('catalog')  # URL для перенаправления после успешного создания карточки
 
+    def form_valid(self, form):
+        # Метод вызывается, если форма валидна
+        # Здесь можно добавить дополнительную логику обработки данных формы перед сохранением объекта
+        return super().form_valid(form)
 
-class AddCardView(View):
-    # Метод для обработки GET-запросов
-    def get(self, request, *args, **kwargs):
-        form = CardModelForm()  # Создаем пустую форму
-        context = {
-            'form': form,
-            # предполагаем, что info['menu'] - это данные, необходимые для отображения меню на странице
-            'menu': info['menu'],  
-        }
-        return render(request, 'cards/add_card.html', context)
-    
-    # Метод для обработки POST-запросов
-    def post(self, request, *args, **kwargs):
-        form = CardModelForm(request.POST)
-        if form.is_valid():
-            card = form.save()  # Сохраняем форму, если она валидна
-            # Перенаправляем пользователя на страницу созданной карточки
-            return redirect(card.get_absolute_url())
-        else:
-            # Если форма не валидна, возвращаем ее обратно в шаблон с ошибками
-            context = {
-                'form': form,
-                'menu': info['menu'],
-            }
-            return render(request, 'cards/add_card.html', context)
+    def get_context_data(self, **kwargs):
+        # Метод для добавления дополнительных данных в контекст шаблона
+        context = super().get_context_data(**kwargs)
+        # Добавляем в контекст информацию о меню, предполагая, что 'info' доступен в контексте
+        context['menu'] = info['menu']
+        return context
 
 
 

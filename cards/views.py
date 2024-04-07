@@ -14,6 +14,7 @@ render(запрос, шаблон, контекст=None)
     Возвращает объект HttpResponse с отрендеренным шаблоном шаблон и контекстом контекст.
     Если контекст не передан, используется пустой словарь.
 """
+from linecache import cache
 from django.db.models import F, Q, Prefetch
 from django.http import HttpResponse, JsonResponse
 from .models import Card
@@ -52,7 +53,7 @@ class AboutView(TemplateView):
     template_name = 'about.html'  # Аналогично указываем имя шаблона
     extra_context = info
 
-
+# @cache_page(60 * 15)  # Кэширует на 15 минут
 class CatalogView(ListView):
     model = Card  # Указываем модель, данные которой мы хотим отобразить
     template_name = 'cards/catalog.html'  # Путь к шаблону, который будет использоваться для отображения страницы

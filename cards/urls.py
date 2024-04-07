@@ -1,10 +1,10 @@
 # /cards/urls.py
 from django.urls import path
 from . import views
-
+from django.views.decorators.cache import cache_page
 # Префикс /cards/
 urlpatterns = [
-    path('catalog/', views.CatalogView.as_view(), name='catalog'),  # Общий каталог всех карточек
+    path('catalog/', cache_page(60*15)(views.CatalogView.as_view()), name='catalog'),  # Общий каталог всех карточек
     path('categories/', views.get_categories, name='categories'),  # Список всех категорий
     path('categories/<slug:slug>/', views.get_cards_by_category, name='category'),  # Карточки по категории
     path('tags/<int:tag_id>/', views.get_cards_by_tag, name='get_cards_by_tag'),  # Карточки по тегу

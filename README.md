@@ -358,3 +358,13 @@ INTERNAL_IPS = [
 - Подключили его в `urls.py` через `as_view()`
 
 **commit: `lesson_65: добавление класса представления для каталога карточек`**
+
+
+## Lesson 67
+- Создал новое приложение `users` через `python manage.py startapp users`
+- Создал `urls.py` в приложении `users`
+- Дал `app_name = 'users'` в `urls.py` в приложении `users` чтобы можно было использовать `{% url 'users:register' %}`
+- Подключил `users.urls` в `aniki.urls` через `include`, дал `namespace='users'`, чтобы можно было использовать `{% url 'users:register' %}`
+- Создал функции заглушки `login_user` и `logout_user` в `views.py` в приложении `users`
+
+**commit: `lesson_67: создание приложения users`**

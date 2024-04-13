@@ -361,6 +361,8 @@ INTERNAL_IPS = [
 
 
 ## Lesson 67
+
+
 - Создал новое приложение `users` через `python manage.py startapp users`
 - Создал `urls.py` в приложении `users`
 - Дал `app_name = 'users'` в `urls.py` в приложении `users` чтобы можно было использовать `{% url 'users:register' %}`
@@ -368,3 +370,13 @@ INTERNAL_IPS = [
 - Создал функции заглушки `login_user` и `logout_user` в `views.py` в приложении `users`
 
 **commit: `lesson_67: создание приложения users`**
+
+
+- Создал папку для шаблонов `users/templates/users/`
+- Создал шаблон `login.html` в `users/templates/users/`
+- создал файл `forms.py` в приложении `users`
+- создал форму `LoginUserForm` в `forms.py` в приложении `users`
+- прописал два представления `login_user`, `logout_user`
+- полностью рабочий минимальный функционал для авторизации и выхода из системы
+
+**commit: `lesson_67: рабочая авторизация и выход из системы`**

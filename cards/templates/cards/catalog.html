@@ -103,10 +103,10 @@
 </div>
 
 
-{% cache 90 catalog_content %}
+{% comment %} {% cache 90 catalog_content %} {% endcomment %}
 {% for card in cards %}
     {% include "cards/include/card_preview.html" %}
 {% endfor %}
-{% endcache %}
+{% comment %} {% endcache %} {% endcomment %}
 {% endblock %}
 

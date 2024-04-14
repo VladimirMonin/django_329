@@ -196,7 +196,13 @@ class AddCardCreateView(LoginRequiredMixin, CreateView):
     form_class = CardModelForm  # Указываем класс формы для создания карточки
     template_name = 'cards/add_card.html'  # Указываем шаблон, который будет использоваться для отображения формы
     success_url = reverse_lazy('catalog')  # URL для перенаправления после успешного создания карточки
-    
+    redirect_field_name = 'next'
+
+    def form_valid(self, form):
+        # Добавляем автора к карточке перед сохранением
+        form.instance.author = self.request.user
+        # Логика обработки данных формы перед сохранением объекта
+        return super().form_valid(form)
 
 
 

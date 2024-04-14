@@ -66,7 +66,7 @@ class AboutView(TemplateView):
     template_name = 'about.html'  # Аналогично указываем имя шаблона
     extra_context = info
 
-# @cache_page(60 * 15)  # Кэширует на 15 минут
+
 class CatalogView(ListView):
     model = Card  # Указываем модель, данные которой мы хотим отобразить
     template_name = 'cards/catalog.html'  # Путь к шаблону, который будет использоваться для отображения страницы
@@ -184,7 +184,6 @@ class CardUpdateView(LoginRequiredMixin, UpdateView):
     model = Card  # Указываем модель, с которой работает представление
     form_class = CardModelForm  # Указываем класс формы для создания карточки
     template_name = 'cards/add_card.html'  # Указываем шаблон, который будет использоваться для отображения формы
-    login_url = reverse_lazy('users:login')  # URL для перенаправления на страницу входа
     redirect_field_name = 'next'  # Имя GET-параметра, в котором хранится URL для перенаправления после входа
 
     # После успешного обновления карточки, пользователь будет перенаправлен на страницу этой карточки
@@ -197,12 +196,7 @@ class AddCardCreateView(LoginRequiredMixin, CreateView):
     form_class = CardModelForm  # Указываем класс формы для создания карточки
     template_name = 'cards/add_card.html'  # Указываем шаблон, который будет использоваться для отображения формы
     success_url = reverse_lazy('catalog')  # URL для перенаправления после успешного создания карточки
-    login_url = reverse_lazy('users:login')  # URL для перенаправления на страницу входа
-    def form_valid(self, form):
-        # Метод вызывается, если форма валидна
-        # Здесь можно добавить дополнительную логику обработки данных формы перед сохранением объекта
-        return super().form_valid(form)
-
+    
 
 
 

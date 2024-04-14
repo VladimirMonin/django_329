@@ -1,11 +1,14 @@
-{% extends "base.html" %}
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="container">
-    <h2>Вход в систему</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
+    {% comment %} Выравнивание элементов по центру {% endcomment %}
+  <div class="row justify-content-center">
+    <div class="col-5">
+      <h2>Вход в систему</h2>
+      <form method="post">
+        {% csrf_token %} {{ form.as_p }}
         <button type="submit" class="btn btn-dark">Войти</button>
-    </form>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}

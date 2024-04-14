@@ -17,6 +17,7 @@ model.choice - это класс, который позволяет создав
 from django.db import models
 from django.urls import reverse
 import logging
+from django.contrib.auth import get_user_model
 
 # Создаем или получаем экземпляр логгера
 logger = logging.getLogger(__name__)
@@ -68,6 +69,7 @@ class Card(models.Model):
                                        default=Status.UNCHECKED, db_column='CheckStatus')
     # Непосредственное определение связи многие ко многим с моделью Tag
     tags = models.ManyToManyField('Tag', related_name='cards', through='CardTags')
+    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, db_column='AuthorID', verbose_name='Автор', related_name='cards', null=True, default=None)
 
     # through - это модель, которая будет использоваться для связи многие ко многим
 

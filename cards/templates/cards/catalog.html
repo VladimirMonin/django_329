@@ -1,6 +1,8 @@
 <!-- cards/templates/cards/catalog.html -->
 <!-- Использует шаблон cards/templates/cards/include/card_preview.html -->
 {% extends "base.html" %}
+{% load cache %}
+
 {% block head %}
 <style>
 /* Стили для темной темы пагинации */
@@ -27,6 +29,7 @@
 </style>
 
 {% endblock %}
+
 {% block content %}
 <div class="text-dark bg-light">
 <h1>Каталог карточек Anki для интервального повторения</h1>
@@ -100,9 +103,10 @@
 </div>
 
 
-
+{% cache 90 catalog_content %}
 {% for card in cards %}
     {% include "cards/include/card_preview.html" %}
 {% endfor %}
+{% endcache %}
 {% endblock %}
 

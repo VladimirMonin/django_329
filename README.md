@@ -386,3 +386,11 @@ INTERNAL_IPS = [
 - Сделали форму с наследованием от `AuthenticationForm` в `forms.py` в приложении `users`
 
 **commit: `lesson_68: переписали login logout на классы починили кеширование`**
+
+
+- Добавили в модель карточки поле автора
+`author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, db_column='AuthorID', verbose_name='Автор', related_name='cards', null=True, default=None)`
+- Сделали миграцию и применили ее
+- Добавили автора в шаблоны каталога и детальное отображение 
+
+**commit: `lesson_68: добавление автора к карточкам`**

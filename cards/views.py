@@ -31,7 +31,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.urls import reverse_lazy
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 info = {
 
@@ -67,7 +67,7 @@ class AboutView(TemplateView):
     extra_context = info
 
 # @cache_page(60 * 15)  # Кэширует на 15 минут
-class CatalogView(MenuMixin, ListView):
+class CatalogView(ListView):
     model = Card  # Указываем модель, данные которой мы хотим отобразить
     template_name = 'cards/catalog.html'  # Путь к шаблону, который будет использоваться для отображения страницы
     context_object_name = 'cards'  # Имя переменной контекста, которую будем использовать в шаблоне
@@ -163,7 +163,7 @@ def get_detail_card_by_id(request, card_id):
     return render(request, 'cards/card_detail.html', card, status=200)
 
 
-class CardDetailView(MenuMixin, DetailView):
+class CardDetailView(DetailView):
     model = Card
     template_name = 'cards/card_detail.html'
     context_object_name = 'card'
@@ -180,22 +180,24 @@ class CardDetailView(MenuMixin, DetailView):
         return obj
 
 
-class CardUpdateView(MenuMixin, UpdateView):
+class CardUpdateView(LoginRequiredMixin, UpdateView):
     model = Card  # Указываем модель, с которой работает представление
     form_class = CardModelForm  # Указываем класс формы для создания карточки
     template_name = 'cards/add_card.html'  # Указываем шаблон, который будет использоваться для отображения формы
-    
+    login_url = reverse_lazy('users:login')  # URL для перенаправления на страницу входа
+    redirect_field_name = 'next'  # Имя GET-параметра, в котором хранится URL для перенаправления после входа
+
     # После успешного обновления карточки, пользователь будет перенаправлен на страницу этой карточки
     def get_success_url(self):
         return reverse_lazy('catalog', kwargs={'pk': self.object.pk})
 
 
-class AddCardCreateView(MenuMixin, CreateView):
+class AddCardCreateView(LoginRequiredMixin, CreateView):
     model = Card  # Указываем модель, с которой работает представление
     form_class = CardModelForm  # Указываем класс формы для создания карточки
     template_name = 'cards/add_card.html'  # Указываем шаблон, который будет использоваться для отображения формы
     success_url = reverse_lazy('catalog')  # URL для перенаправления после успешного создания карточки
-
+    login_url = reverse_lazy('users:login')  # URL для перенаправления на страницу входа
     def form_valid(self, form):
         # Метод вызывается, если форма валидна
         # Здесь можно добавить дополнительную логику обработки данных формы перед сохранением объекта

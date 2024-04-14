@@ -25,3 +25,7 @@ def logout_user(request):
     logout(request)
     # Перенаправление на страницу входа, используя reverse для получения URL по имени
     return redirect(reverse('users:login'))
+
+
+def signup_user(request):
+    pass

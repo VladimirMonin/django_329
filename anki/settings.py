@@ -24,7 +24,10 @@ SECRET_KEY = 'django-insecure-wc#6=w$tkk$wn33_yqymv2huz2n3%6h)18y@v-cry(*cx6++#r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["82.97.247.78", "vladimirmonin-django-329-d5fd.twc1.net", "127.0.0.1"]
+ALLOWED_HOSTS = ["82.97.247.78", "https://vladimirmonin-django-329-d5fd.twc1.net/", "127.0.0.1"]
+CSRF_TRUSTED_ORIGINS = ['https://vladimirmonin-django-329-d5fd.twc1.net']
+
+
 
 INTERNAL_IPS = [
     # ...

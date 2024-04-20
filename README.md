@@ -407,4 +407,16 @@ python3 manage.py migrate && echo "from django.contrib.auth import get_user_mode
 
 
 ## Lesson 69
-- Деплой
+- Деплой на хостинге TimeWeb
+- Переменные окружения и файл `.env`
+
+### Регистрация новых пользователей
+- Создали форму `RegisterUserForm` в `forms.py` в приложении `users`
+- Сделали в ней сверку двух полей ввода паролей а так же проверку на уникальность email
+- Создали представление - функцию `register_user` в `views.py` в приложении `users`
+- Создали шаблон `register.html` в `users/templates/users/`
+- Создали шаблон `register_done.html` в `users/templates/users/`
+- Протестировали регистрацию пользователя
+
+
+**commit: `lesson_69: регистрация новых пользователей - функция`**

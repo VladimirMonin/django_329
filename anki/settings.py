@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,10 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-wc#6=w$tkk$wn33_yqymv2huz2n3%6h)18y@v-cry(*cx6++#r'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# os.getnev() - функция для получения переменных окружения
+# вернет None, если переменной нет и значение переменной, если она есть
+# Если будет DEBUG=True, то DEBUG = True, иначе False
+# Тогда будет установлено значение  DEBUG = 'True' == 'True'
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ["82.97.247.78", "vladimirmonin-django-329-d5fd.twc1.net", "127.0.0.1"]
 CSRF_TRUSTED_ORIGINS = ['https://vladimirmonin-django-329-d5fd.twc1.net']

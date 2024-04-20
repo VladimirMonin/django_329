@@ -426,3 +426,7 @@ python3 manage.py migrate && echo "from django.contrib.auth import get_user_mode
 
 
 **commit: `lesson_69: форма регистрации UserCreationForm - класс`**
+
+- Создали `RegisterUser` представление на основе `CreateView` в `views.py` в приложении `users`
+
+**commit: `lesson_69: представление регистрации RegisterUser`**

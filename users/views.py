@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
 from .forms import LoginUserForm, RegisterUserForm
 from django.urls import reverse, reverse_lazy
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView
 
 
 class RegisterDone(TemplateView):
@@ -25,15 +25,8 @@ class LogoutUser(LogoutView):
     next_page = reverse_lazy('users:login')
 
 
-
-def signup_user(request):
-    if request.method == 'POST':
-        form = RegisterUserForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])  # Устанавливаем пароль
-            user.save()
-            return redirect('users:register_done')  # Перенаправляем на страницу успешной регистрации
-    else:
-        form = RegisterUserForm()  # Пустая форма для GET-запроса
-    return render(request, 'users/register.html', {'form': form})
+class RegisterUser(CreateView):
+    form_class = RegisterUserForm  # Указываем класс формы, который мы создали для регистрации
+    template_name = 'users/register.html'  # Путь к шаблону, который будет использоваться для отображения формы
+    extra_context = {'title': 'Регистрация'}  # Дополнительный контекст для передачи в шаблон
+    success_url = reverse_lazy('users:login')  # URL, на который будет перенаправлен пользователь после успешной регистрации

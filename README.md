@@ -420,3 +420,9 @@ python3 manage.py migrate && echo "from django.contrib.auth import get_user_mode
 
 
 **commit: `lesson_69: регистрация новых пользователей - функция`**
+
+- Обновили форму на специальный класс `UserCreationForm` в `forms.py` в приложении `users`
+- Обновили шаблон `register.html` в `users/templates/users/` с обработкой ошибок формы
+
+
+**commit: `lesson_69: форма регистрации UserCreationForm - класс`**

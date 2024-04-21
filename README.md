@@ -456,3 +456,13 @@ python3 manage.py migrate && echo "from django.contrib.auth import get_user_mode
 
 
 **commit: `lesson_70: добавление профиля пользователя`**
+
+- Создали `UserPasswordChange` - наследник `PasswordChangeView` в `views.py` в приложении `users`
+- Создали `UserPasswordChangeDone` - наследник `TemplateView` в `views.py` в приложении `users`
+- Создали шаблон `password_change_done.html` в `users/templates/users/`
+- Создали шаблон `password_change_form.html` в `users/templates/users/`
+- Создали форму `UserPasswordChangeForm` - наследник `PasswordChangeForm` в `forms.py` в приложении `users`
+- Подключили это в urls.py
+- Протестировали
+
+**commit: `lesson_70: изменение пароля пользователя`**

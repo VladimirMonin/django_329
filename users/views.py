@@ -9,7 +9,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import ProfileUserForm
 from django.views.generic.edit import UpdateView
-
+from django.contrib.auth.views import PasswordChangeView
+from .forms import UserPasswordChangeForm
 
 class RegisterDone(TemplateView):
     template_name = 'users/register_done.html'
@@ -72,3 +73,14 @@ class ProfileUser(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         # Возвращает объект модели, который должен быть отредактирован
         return self.request.user
+    
+
+class UserPasswordChange(PasswordChangeView):
+    form_class = UserPasswordChangeForm
+    template_name = 'users/password_change_form.html'
+    success_url = reverse_lazy('users:password_change_done')
+
+
+class UserPasswordChangeDone(TemplateView):
+    template_name = 'users/password_change_done.html'
+    extra_context = {'title': 'Пароль изменен успешно'}

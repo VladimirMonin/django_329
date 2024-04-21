@@ -466,3 +466,10 @@ python3 manage.py migrate && echo "from django.contrib.auth import get_user_mode
 - Протестировали
 
 **commit: `lesson_70: изменение пароля пользователя`**
+
+- Шаблоны `password_change_form.html`, `profile_cards.html` - Для отображения карточек пользователя
+- Шаблон `profile.html` - меню и BS5
+- View `UserCardsView` - для отображения карточек пользователя в Личном кабинете
+- Подключили это в urls.py
+
+**commit: `lesson_70: отображение карточек пользователя в Личном кабинете`**

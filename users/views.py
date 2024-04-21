@@ -11,6 +11,8 @@ from .forms import ProfileUserForm
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.views import PasswordChangeView
 from .forms import UserPasswordChangeForm
+from django.views.generic import ListView
+from cards.models import Card
 
 class RegisterDone(TemplateView):
     template_name = 'users/register_done.html'
@@ -84,3 +86,12 @@ class UserPasswordChange(PasswordChangeView):
 class UserPasswordChangeDone(TemplateView):
     template_name = 'users/password_change_done.html'
     extra_context = {'title': 'Пароль изменен успешно'}
+
+
+class UserCardsView(ListView):
+    model = Card
+    template_name = 'users/profile_cards.html'
+    context_object_name = 'cards'
+
+    def get_queryset(self):
+        return Card.objects.filter(author=self.request.user).order_by('-upload_date')

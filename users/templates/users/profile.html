@@ -1,9 +1,27 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-dark">Сохранить</button>
-</form>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Scrollspy Menu -->
+            <nav id="navbar-example3" class="flex-column align-items-stretch pe-3">
+                <nav class="nav nav-pills flex-column">
+                    <a class="nav-link active bg-dark text-light" href="{% url 'users:profile'%}">Профиль</a>
+                    <a class="nav-link  text-dark" href="{% url 'users:password_change'%}">Сменить пароль</a>
+                    <a class="nav-link  text-dark" href="{% url 'users:profile_cards'%}">Мои карточки</a>
+                </nav>
+            </nav>
+        </div>
+        <div class="col-md-9">
+            <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" class="scrollspy-example">
+                <!-- Profile Section -->
+                <div id="item-1">
+                    {{ form.as_p }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -10,6 +10,8 @@ urlpatterns = [
     path('signup/', views.RegisterUser.as_view(), name='signup'),
     path('register_done/', views.RegisterDone.as_view(), name='register_done'),
     path('profile/', views.ProfileUser.as_view(), name='profile'),  # Маршрут к профилю пользователя
+    path('profile_cards/', views.UserCardsView.as_view(), name='profile_cards'),
     path('password_change/', views.UserPasswordChange.as_view(), name='password_change'),
-    path('password_change/done/', views.UserPasswordChangeDone.as_view(), name='password_change_done')
+    path('password_change/done/', views.UserPasswordChangeDone.as_view(), name='password_change_done'),
+
     ]

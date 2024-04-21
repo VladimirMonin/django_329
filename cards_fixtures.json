@@ -3305,13 +3305,6 @@
 },
 {
   "model": "cards.tag",
-  "pk": 466,
-  "fields": {
-    "name": "try_except_else"
-  }
-},
-{
-  "model": "cards.tag",
   "pk": 467,
   "fields": {
     "name": "рекурсия"
@@ -16408,20 +16401,6 @@
   }
 },
 {
-  "model": "cards.card",
-  "pk": 466,
-  "fields": {
-    "question": "Шашлык или Пицца?",
-    "answer": "Шашлык!",
-    "category_id": null,
-    "upload_date": "2024-04-14T12:32:49.456Z",
-    "views": 1,
-    "favorites": 0,
-    "check_status": false,
-    "author": 1
-  }
-},
-{
   "model": "cards.cardtags",
   "pk": 1,
   "fields": {
@@ -19575,14 +19554,6 @@
 },
 {
   "model": "cards.cardtags",
-  "pk": 395,
-  "fields": {
-    "card": 65,
-    "tag": 466
-  }
-},
-{
-  "model": "cards.cardtags",
   "pk": 396,
   "fields": {
     "card": 65,
@@ -20139,14 +20110,6 @@
   "fields": {
     "card": 76,
     "tag": 1055
-  }
-},
-{
-  "model": "cards.cardtags",
-  "pk": 466,
-  "fields": {
-    "card": 76,
-    "tag": 179
   }
 },
 {
@@ -39539,14 +39502,6 @@
   "fields": {
     "card": 465,
     "tag": 1408
-  }
-},
-{
-  "model": "cards.cardtags",
-  "pk": 2891,
-  "fields": {
-    "card": 466,
-    "tag": 1409
   }
 }
 ]

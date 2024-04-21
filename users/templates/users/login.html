@@ -11,7 +11,7 @@
         <input type="hidden" name="next" value="{{ request.GET.next }}">
         <button type="submit" class="btn btn-dark">Войти</button>
         {% comment %} Ссылка забыл пароль {% endcomment %}
-        <a href="{% url 'users:password_reset' %}">Забыли пароль?</a>
+        <a href="{% url 'users:password_reset' %}" class="secondary-link">Забыли пароль?</a>
       </form>
     </div>
   </div>

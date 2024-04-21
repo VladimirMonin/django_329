@@ -438,3 +438,13 @@ python3 manage.py migrate && echo "from django.contrib.auth import get_user_mode
 
 
 **commit: `lesson_70: работа next в формах`**
+#TODO - добавить next в конспект в раздел next
+
+
+- Делаем авторизацию через email или username, определив свой собственный `EmailAuthBackend` в `authentication.py`
+- Подключили его в `settings.py` в `AUTHENTICATION_BACKENDS`
+- Перепроверили форму регистрации, метод `clean_email`, что адреса почты уникальны
+- Протестировали
+
+
+**commit: `lesson_70: авторизация через email или username`**

@@ -143,3 +143,9 @@ CACHES = {
 
     }
 }
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Стандартный бекенд для аутентификации по username
+    'users.authentication.EmailAuthBackend',      # Наш кастомный бекенд для аутентификации по email
+]

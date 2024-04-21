@@ -473,3 +473,15 @@ python3 manage.py migrate && echo "from django.contrib.auth import get_user_mode
 - Подключили это в urls.py
 
 **commit: `lesson_70: отображение карточек пользователя в Личном кабинете`**
+
+- Проделана большая работа по оптимизации шаблонов.
+- Создан базовый шаблон для профиля `base_profile.html`, расширяет `base.html`
+- Создана папка `includes` для меню профиля
+- В ней создан `profile_nav.html` - меню профиля, вставляется в `base_profile.html`
+- Созданы шаблоны для каждой из страниц, которые используют минимум кода и расширяют `base_profile.html`
+  - `profile_cards.html`
+  - `profile.html`
+  - `password_change_form.html`
+
+
+**commit: `lesson_70: оптимизация шаблонов профиля`**

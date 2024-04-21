@@ -14,6 +14,10 @@ from .forms import UserPasswordChangeForm
 from django.views.generic import ListView
 from cards.models import Card
 
+"""
+Это работает на переменной active_tab, которая передается в контексте шаблона.
+Значения: profile, password_change, profile_cards
+"""
 class RegisterDone(TemplateView):
     template_name = 'users/register_done.html'
     extra_context = {'title': 'Регистрация завершена'}
@@ -66,7 +70,8 @@ class ProfileUser(LoginRequiredMixin, UpdateView):
     model = get_user_model()  # Используем модель текущего пользователя
     form_class = ProfileUserForm  # Связываем с формой профиля пользователя
     template_name = 'users/profile.html'  # Указываем путь к шаблону
-    extra_context = {'title': 'Профиль пользователя'}  # Дополнительный контекст для шаблона
+    extra_context = {'title': 'Профиль пользователя',
+                     'active_tab': 'profile'}  # Дополнительный контекст для передачи в шаблон
 
     def get_success_url(self):
         # URL, на который переадресуется пользователь после успешного обновления
@@ -80,6 +85,8 @@ class ProfileUser(LoginRequiredMixin, UpdateView):
 class UserPasswordChange(PasswordChangeView):
     form_class = UserPasswordChangeForm
     template_name = 'users/password_change_form.html'
+    extra_context = {'title': 'Изменение пароля',
+                     'active_tab': 'password_change'}
     success_url = reverse_lazy('users:password_change_done')
 
 
@@ -92,6 +99,8 @@ class UserCardsView(ListView):
     model = Card
     template_name = 'users/profile_cards.html'
     context_object_name = 'cards'
+    extra_context = {'title': 'Мои карточки',
+                     'active_tab': 'profile_cards'}
 
     def get_queryset(self):
         return Card.objects.filter(author=self.request.user).order_by('-upload_date')

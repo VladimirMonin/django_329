@@ -5,6 +5,10 @@ from django.contrib.auth.views import LoginView, LogoutView
 from .forms import LoginUserForm, RegisterUserForm
 from django.urls import reverse, reverse_lazy
 from django.views.generic import TemplateView, CreateView
+from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import ProfileUserForm
+from django.views.generic.edit import UpdateView
 
 
 class RegisterDone(TemplateView):
@@ -53,3 +57,18 @@ class LoginUser(LoginView):
         if next_url:
             return next_url # Перенаправляем на next_url, если он был передан
         return reverse_lazy('catalog')
+    
+
+class ProfileUser(LoginRequiredMixin, UpdateView):
+    model = get_user_model()  # Используем модель текущего пользователя
+    form_class = ProfileUserForm  # Связываем с формой профиля пользователя
+    template_name = 'users/profile.html'  # Указываем путь к шаблону
+    extra_context = {'title': 'Профиль пользователя'}  # Дополнительный контекст для шаблона
+
+    def get_success_url(self):
+        # URL, на который переадресуется пользователь после успешного обновления
+        return reverse_lazy('users:profile')
+
+    def get_object(self, queryset=None):
+        # Возвращает объект модели, который должен быть отредактирован
+        return self.request.user

@@ -448,3 +448,11 @@ python3 manage.py migrate && echo "from django.contrib.auth import get_user_mode
 
 
 **commit: `lesson_70: авторизация через email или username`**
+
+- Создали шаблон `profile.html` в `users/templates/users/`
+- Создали форму `ProfileUserForm` в `forms.py` в приложении `users`
+- Создали представление `ProfileUser` на основе `UpdateView` в `views.py` в приложении `users`
+- Пофиксили `nav_menu.html`, добавили кликабельный ник пользователя
+
+
+**commit: `lesson_70: добавление профиля пользователя`**

@@ -34,3 +34,28 @@ class RegisterUserForm(UserCreationForm):
         if get_user_model().objects.filter(email=email).exists():
             raise ValidationError('Такой email уже существует.')  # Проверка уникальности email
         return email
+    
+
+class ProfileUserForm(forms.ModelForm):
+    username = forms.CharField(
+        disabled=True,  # Поле не редактируемое
+        label='Логин',
+        widget=forms.TextInput(attrs={'class': 'form-control'})  # Использование Bootstrap класса
+    )
+    email = forms.CharField(
+        disabled=True,  # Поле не редактируемое
+        label='E-mail',
+        widget=forms.TextInput(attrs={'class': 'form-control'})  # Использование Bootstrap класса
+    )
+
+    class Meta:
+        model = get_user_model()
+        fields = ['username', 'email', 'first_name', 'last_name']
+        labels = {
+            'first_name': 'Имя',
+            'last_name': 'Фамилия'
+        }
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'})
+        }

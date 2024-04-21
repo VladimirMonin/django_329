@@ -8,4 +8,5 @@ urlpatterns = [
     path('logout/', views.LogoutUser.as_view(), name='logout'),
     path('signup/', views.RegisterUser.as_view(), name='signup'),
     path('register_done/', views.RegisterDone.as_view(), name='register_done'),
+    path('profile/', views.ProfileUser.as_view(), name='profile')  # Маршрут к профилю пользователя
     ]

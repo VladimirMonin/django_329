@@ -430,3 +430,11 @@ python3 manage.py migrate && echo "from django.contrib.auth import get_user_mode
 - Создали `RegisterUser` представление на основе `CreateView` в `views.py` в приложении `users`
 
 **commit: `lesson_69: представление регистрации RegisterUser`**
+
+
+## Lesson 70
+- Разобрали работу `next` в формах, на примере добавления карточки
+- Посмотрели как будет выглядить функция логина и класс логина с `next`
+
+
+**commit: `lesson_70: работа next в формах`**
